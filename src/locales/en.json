@@ -1,0 +1,110 @@
+{
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "testimonials": "Testimonials",
+    "contact": "Contact",
+    "name": "Jihad Shojaeha",
+
+    
+      "headerSection1": {
+        "mainTitle": "Hi, I'm Jihad Shojaeha",
+        "subtitle": "Training & Consulting Expert",
+        "descriptionPart1": "I help you transform your skills and expertise into a",
+        "descriptionHighlight": "real source of income",
+        "descriptionPart2": "through paid training and consulting services",
+        
+        "btnServices": "Explore Our Services",
+        "btnEbook": "Free eBook",
+        "btnWhatsapp": "Contact via WhatsApp",
+        "btnTelegram": "Contact Me",
+        "btnConsult": "Book a Consultation",
+    
+        "stats": [
+          {
+            "icon": "⭐",
+            "number": "15+",
+            "label": "Years of Experience",
+            "suffix": "+"
+          },
+          {
+            "icon": "🕒",
+            "number": "15000+",
+            "label": "Training Hours",
+            "suffix": "+"
+          },
+          {
+            "icon": "👥",
+            "number": "10000+",
+            "label": "Trained Participants",
+            "suffix": "+"
+          },
+          {
+            "icon": "🌍",
+            "number": "8+",
+            "label": "Countries (Arab & European)",
+            "suffix": "+"
+          },
+          {
+            "icon": "📄",
+            "number": "100+",
+            "label": "Training Contracts",
+            "suffix": "+"
+          }
+        ]
+      },
+    
+    
+
+    "footer": {
+      "quote": "When you master your skills, your life transforms... I'm here to help you make that transformation.",
+      "ready": "Are you ready to start your journey?",
+      "whatsapp": "Contact via WhatsApp",
+      "rights": "All rights reserved - Jihad Shojaeha"
+    },
+
+    "headerSection2": {
+    "title": "Jihad Shojaeha",
+    "subtitle": "Training and Consulting Expert",
+    "experience": {
+      "title": "Extensive Experience",
+      "description": "Trainer and consultant with over 20 years of experience in Palestine, Arab countries, and Europe, delivering over 15,000 training hours and benefiting more than 10,000 trainees."
+    },
+    "international": {
+      "title": "International Collaboration",
+      "description": "Worked with global institutions like EFE, JICA, GIZ, World Bank, and Swedish Development Agency, alongside hundreds of local and community institutions."
+    },
+    "focus": {
+      "title": "Modern Focus",
+      "description": "Supporting ambitious trainers to break into the paid training market and secure contracts with local and international institutions using practical tools and strategies."
+    } 
+  },
+
+  "headerSection3": {
+  "title": "My Training and Consulting Services",
+  "subtitle": "Comprehensive training and consulting solutions tailored to your needs",
+  "tot": {
+    "title": "Trainer of Trainers (TOT) Programs",
+    "items": [
+      "Live Zoom courses with American Board certification",
+      "Recorded course available anytime at your convenience"
+    ]
+  },
+  "consulting": {
+    "title": "Consulting and Individual Coaching",
+    "items": [
+      "Professional guidance to enter the world of paid training",
+      "Building the trainer’s personal brand",
+      "Developing technical and financial proposals"
+    ]
+  },
+  "corporate": {
+    "title": "Customized Programs for Organizations",
+    "items": [
+      "Life skills and 21st-century skills",
+      "Career planning and job market readiness",
+      "Effective training and facilitation skills"
+    ]
+  }
+}
+}

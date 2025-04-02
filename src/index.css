@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🌟 Twinkling stars */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.5); }
+}
+.animate-twinkle {
+  animation: twinkle 4s ease-in-out infinite alternate;
+}
+
+/* 🌊 Waves going up */
+@keyframes waveUp {
+  0% { transform: translateY(100%); opacity: 0; }
+  50% { opacity: 0.1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+.animate-wave-up {
+  animation: waveUp 8s linear infinite;
+}
+
+/* 🫧 Floating blobs */
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 30px) scale(0.95); }
+}
+.animate-blob {
+  animation: blob 20s infinite ease-in-out;
+}
+
+/* 💫 Floating motion */
+@keyframes floating {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-30px) translateX(20px); }
+}
+.animate-floating {
+  animation: floating 10s ease-in-out infinite;
+}
+
+@keyframes floating-slow {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-20px) translateX(-30px); }
+}
+.animate-floating-slow {
+  animation: floating-slow 16s ease-in-out infinite;
+}
+
+@keyframes floating-delay {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-25px) scale(1.1); }
+}
+.animate-floating-delay {
+  animation: floating-delay 14s ease-in-out infinite;
+}
+
+/* 🔦 Light scan effect */
+@keyframes light-scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  50% { opacity: 0.2; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+.animate-light-scan {
+  animation: light-scan 6s linear infinite;
+}
+
+/* ⬇️ Scroll indicator animation */
+@keyframes scroll {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+.animate-scroll {
+  animation: scroll 1.5s infinite;
+}
