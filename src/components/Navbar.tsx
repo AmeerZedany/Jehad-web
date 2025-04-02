@@ -43,12 +43,12 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-xl shadow-lg border-b border-white/10"
+      className="fixed top-0 w-full z-50 bg-black/70 backdrop-blur-xl border-b border-white/10 shadow-xl"
       initial={{ opacity: 0, y: -30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <div className="container mx-auto flex justify-between items-center py-3 px-6 sm:px-8">
+      <div className="container mx-auto flex justify-between items-center py-4 px-6 sm:px-8">
         {/* Logo & Signature */}
         <Link to="/" className="flex items-center gap-3">
           <motion.img
@@ -74,7 +74,7 @@ const Navbar = () => {
           </motion.span>
         </Link>
 
-        {/* Desktop Navigation */}
+        {/* Desktop Nav */}
         <ul className="hidden md:flex items-center gap-6 text-sm sm:text-base text-white font-medium">
           {navLinks.map((link, idx) => (
             <motion.li
@@ -82,7 +82,7 @@ const Navbar = () => {
               className={`list-none relative group transition-all duration-300 ${
                 location.pathname === link.path ? 'text-orange-500' : 'text-white'
               }`}
-              whileHover={{ y: -3, scale: 1.08 }}
+              whileHover={{ y: -2, scale: 1.06 }}
               transition={{ type: 'spring', stiffness: 300 }}
             >
               <Link to={link.path} className="relative px-1">
@@ -92,7 +92,7 @@ const Navbar = () => {
             </motion.li>
           ))}
 
-          {/* Social Media Icons */}
+          {/* Social Icons */}
           <div className="flex items-center gap-4 ml-4">
             {socialIcons.map(({ icon, link }, i) => (
               <motion.a
@@ -100,8 +100,9 @@ const Navbar = () => {
                 href={link}
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.15, rotate: 3 }}
-                className="text-white hover:text-orange-400 transition text-lg"
+                whileHover={{ scale: 1.2 }}
+                transition={{ duration: 0.2 }}
+                className="text-white hover:text-orange-400 text-lg"
               >
                 {icon}
               </motion.a>
@@ -119,12 +120,10 @@ const Navbar = () => {
           </motion.button>
         </ul>
 
-        {/* Mobile Menu Button */}
+        {/* Mobile Toggle Button */}
         <button
-          className="md:hidden text-white focus:outline-none"
+          className="md:hidden text-white"
           onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-          aria-expanded={isOpen}
         >
           {isOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
@@ -134,12 +133,11 @@ const Navbar = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed top-0 right-0 w-3/4 h-full bg-gradient-to-l from-black/95 via-black/90 to-black/80 backdrop-blur-lg z-50 flex flex-col items-center text-center px-6 pt-24 space-y-6 md:hidden"
-            role="menu"
+            className="fixed top-0 right-0 w-3/4 h-full bg-black/90 backdrop-blur-md z-50 flex flex-col items-center text-center px-6 pt-24 space-y-6 md:hidden"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', stiffness: 200, damping: 30 }}
+            transition={{ type: 'spring', stiffness: 220, damping: 30 }}
           >
             {navLinks.map((link, index) => (
               <motion.div
@@ -150,7 +148,7 @@ const Navbar = () => {
               >
                 <Link
                   to={link.path}
-                  className={`text-white text-lg sm:text-xl font-medium hover:text-orange-500 transition-all block ${
+                  className={`text-white text-lg sm:text-xl font-medium hover:text-orange-400 transition-all block ${
                     location.pathname === link.path ? 'text-orange-500' : ''
                   }`}
                 >
@@ -159,7 +157,6 @@ const Navbar = () => {
               </motion.div>
             ))}
 
-            {/* Mobile Social Icons */}
             <div className="flex gap-5 pt-4">
               {socialIcons.map(({ icon, link }, i) => (
                 <a
@@ -167,18 +164,17 @@ const Navbar = () => {
                   href={link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white hover:text-orange-400 transition text-xl"
+                  className="text-white hover:text-orange-400 text-xl transition"
                 >
                   {icon}
                 </a>
               ))}
             </div>
 
-            {/* Language Switcher Mobile */}
             <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={toggleLanguage}
-              className="flex items-center gap-2 text-xs sm:text-sm border border-white px-4 py-1 rounded-full text-white mt-6 hover:bg-white hover:text-black transition"
+              className="flex items-center gap-2 text-sm border border-white px-4 py-1 rounded-full text-white mt-6 hover:bg-white hover:text-black transition"
             >
               <img src={flagSrc} alt="flag" className="w-5 h-5 rounded-sm" />
               <span className="font-semibold">{langLabel}</span>
