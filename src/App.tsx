@@ -11,7 +11,7 @@ import Contact from './pages/Contact';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Jehad-web">
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <AnimatePresence mode="wait">
