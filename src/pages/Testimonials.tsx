@@ -1,5 +1,3 @@
-import React from 'react';
-import PageTransition from '../components/PageTransition';
 
 const testimonials = [
   {
@@ -18,7 +16,6 @@ const testimonials = [
 
 const Testimonials = () => {
   return (
-    <PageTransition>
       <div className="container mx-auto px-4 pt-32 max-w-4xl text-gray-800">
         <h1 className="text-4xl font-bold mb-10 text-center">قصص النجاح والتوصيات</h1>
 
@@ -40,7 +37,6 @@ const Testimonials = () => {
           <p className="text-sm text-gray-400">يمكنك إرسال التوصيات أو الشهادات لاحقًا وسأضيفها هنا.</p>
         </div>
       </div>
-    </PageTransition>
   );
 };
 

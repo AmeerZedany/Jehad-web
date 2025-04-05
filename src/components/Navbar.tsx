@@ -41,8 +41,9 @@ const Navbar = () => {
   ];
 
   return (
+    
     <motion.nav
-      className="fixed top-0 w-full z-50 bg-black/70 backdrop-blur-xl border-b border-white/10 shadow-xl"
+      className="fixed top-0 w-full z-50 bg-black backdrop-blur-xl border-b border-white/10 shadow-xl"
       initial={{ opacity: 0, y: -30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}

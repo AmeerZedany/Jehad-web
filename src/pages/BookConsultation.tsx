@@ -1,10 +1,6 @@
-import React from 'react';
-import PageTransition from '../components/PageTransition';
-import { Calendar } from 'lucide-react';
 
 const BookConsultation = () => {
   return (
-    <PageTransition>
       <div className="container mx-auto px-4 pt-32 max-w-4xl text-gray-800 leading-relaxed">
         <h1 className="text-4xl font-bold mb-8 text-center">احجز استشارتك الآن</h1>
 
@@ -47,7 +43,6 @@ const BookConsultation = () => {
           يمكن الدفع عبر PayPal أو بطاقة ائتمان بعد الحجز. سيتم إرسال التفاصيل عبر البريد الإلكتروني.
         </div>
       </div>
-    </PageTransition>
   );
 };
 

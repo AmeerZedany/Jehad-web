@@ -1,11 +1,8 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { FaAward, FaUsers, FaHandshake, FaChalkboardTeacher } from 'react-icons/fa';
-import PageTransition from '../components/PageTransition';
 
 const About = () => {
   return (
-    <PageTransition>
       <section className="relative bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#3b0764] text-white py-24 px-6 md:px-24 min-h-screen text-right overflow-hidden" dir="rtl">
         {/* خلفيات ناعمة بلوب */}
         <div className="absolute w-[480px] h-[480px] bg-indigo-700 opacity-10 rounded-full blur-[180px] top-[-100px] left-[-150px]" />
@@ -83,8 +80,8 @@ const About = () => {
             
           </motion.div>
         </motion.div>
+
       </section>
-    </PageTransition>
   );
 };
 
