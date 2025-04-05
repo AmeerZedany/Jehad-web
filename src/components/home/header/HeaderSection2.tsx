@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FaBook, FaGlobe, FaBullseye } from 'react-icons/fa';
+import jehadHeader from '../../../assets/logo.png';
 
 const HeaderSection2 = () => {
   const { t, i18n } = useTranslation();
@@ -67,18 +68,45 @@ const HeaderSection2 = () => {
         viewport={{ once: true, margin: '-100px' }}
       >
         {/* Title */}
-        <motion.div className="relative inline-block px-4" variants={itemVariants}>
-          <h2 className="text-[clamp(2rem,6vw,4.5rem)] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-3">
-            {t('headerSection2.title')}
-          </h2>
-          <p className="text-[clamp(1.1rem,3vw,1.8rem)] text-white/90 font-medium mb-6 leading-snug">
-            {t('headerSection2.subtitle')}
-          </p>
-          <motion.div
-            className="h-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 w-28 sm:w-36 lg:w-48 mx-auto rounded-full origin-left"
-            variants={underlineVariants}
-          />
-        </motion.div>
+{/* Signature Logo Block */}
+<motion.div className="relative inline-block px-4" variants={itemVariants}>
+  <motion.div
+    className={`relative z-10 flex items-center justify-center gap-6 flex-wrap px-8 py-6 bg-white rounded-2xl shadow-lg max-w-4xl mx-auto ${
+      isArabic ? 'flex-row-reverse text-right' : 'text-left'
+    }`}
+    initial={{ opacity: 0, y: 30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, ease: 'easeOut' }}
+  >
+    {/* Logo */}
+    <motion.img
+      src={jehadHeader}
+      alt="Jehad Logo"
+      className="h-16 sm:h-20 w-auto object-contain"
+      animate={{ y: [0, -2, 0] }}
+      transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+    />
+
+    {/* Elegant separator */}
+    <div className="text-[2.5rem] text-blue-400 font-light select-none flex items-center justify-center leading-none">
+      |
+    </div>
+
+    {/* Name & subtitle */}
+    <div className="flex flex-col items-center justify-center text-center">
+      <h2 className="text-[1.6rem] sm:text-[1.9rem] md:text-[2.1rem] font-extrabold text-black leading-snug">
+        المدرب <span className="text-blue-500">جهاد شجاعية</span>
+      </h2>
+      <p className="text-sm sm:text-base md:text-lg text-gray-600 font-medium mt-1">
+        Professional Training
+      </p>
+    </div>
+  </motion.div>
+
+ 
+</motion.div>
+
+
 
         {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mt-10">
@@ -134,15 +162,16 @@ const HeaderSection2 = () => {
           ))}
         </div>
 
-        {/* CTA Button */}
-        <motion.a
-          href="about"
-          className="mt-6 inline-block px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-full shadow-lg transition-all duration-500 hover:shadow-2xl text-sm sm:text-base"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          {t('headerSection2.readMore')}
-        </motion.a>
+       {/* CTA Button - Bigger and Blue */}
+<motion.a
+  href="about"
+  className="mt-8 inline-block px-10 py-4 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-full shadow-md transition-all duration-300 hover:shadow-xl text-base sm:text-lg"
+  whileHover={{ scale: 1.07 }}
+  whileTap={{ scale: 0.95 }}
+>
+  {t('headerSection2.readMore')}
+</motion.a>
+
       </motion.div>
     </section>
   );
