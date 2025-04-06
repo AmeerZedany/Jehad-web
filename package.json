@@ -5,16 +5,16 @@
   "type": "module",
   "scripts": {
     "homepage": "https://ameerzedany.github.io/Jehad-web",
-
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "deploy": "gh-pages -d dist",
     "predeploy": "npm run build"
-
   },
   "dependencies": {
+    "axios": "^1.8.4",
+    "emailjs-com": "^3.2.0",
     "framer-motion": "^11.0.8",
     "i18next": "^24.2.3",
     "i18next-browser-languagedetector": "^8.0.4",
@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
+    "@types/axios": "^0.9.36",
     "@types/react": "^18.3.19",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",

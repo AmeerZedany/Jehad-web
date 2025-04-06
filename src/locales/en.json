@@ -3,8 +3,9 @@
     "about": "About",
     "services": "Services",
     "testimonials": "Testimonials",
-    "contact": "Contact",
+    "contact0": "Contact",
     "name": "Jihad Shojaeha",
+    "album": "Album",
 
     
       "headerSection1": {
@@ -106,5 +107,37 @@
       "Effective training and facilitation skills"
     ]
   }
-}
+},
+
+  "gallery": {
+    "title": "From Training to Achievement",
+    "description": "Photos capturing moments from my trainings and milestones along the journey."
+  },
+  
+    "contact": {
+      "title": "Get in Touch",
+      "intro": "We’re waiting for your messages and suggestions. Share your thoughts or book a session for collaboration and training.",
+      "infoCards": {
+        "email": "Email",
+        "phone": "Phone",
+        "whatsapp": "WhatsApp",
+        "booking": "Book a Session"
+      },
+      "form": {
+        "fullName": "Full Name",
+        "email": "Email Address",
+        "message": "Write your message here...",
+        "button": "Send Message",
+        "success": "✅ Your message has been sent successfully.",
+        "error": "❌ An error occurred while sending. Please try again."
+      },
+      "socialMedia": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn"
+      },
+      "noText": "No images available."
+    }
+  
+  
 }

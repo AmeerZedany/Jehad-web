@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
@@ -11,7 +11,7 @@ const Navbar = () => {
   const location = useLocation();
   const { t, i18n } = useTranslation();
 
-  const primaryBlue = '#2563eb'; // الأزرق المتوسط من اللوجو
+  const primaryBlue = '#2563eb'; // الأزرق المتqوسط من اللوجو
 
   useEffect(() => {
     document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
@@ -23,8 +23,9 @@ const Navbar = () => {
     { name: t('home'), path: '/' },
     { name: t('about'), path: '/about' },
     { name: t('services'), path: '/services' },
-    { name: t('testimonials'), path: '/testimonials2' },
-    { name: t('contact'), path: '/contact' },
+    { name: t('contact0'), path: '/contact' },
+    { name: t('album'), path: '/album' },
+   
   ];
 
   const toggleLanguage = () => {

@@ -24,46 +24,35 @@ const fadeInUp = {
 const Contact = () => {
   const { t } = useTranslation();
 
-  // بيانات النموذج (name, email, message)
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  // حالة الإرسال / الرسالة للمستخدم
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
   const [status, setStatus] = useState('');
 
-  // متابعة التغير في الحقول
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // إرسال النموذج عبر web3forms
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setStatus(t('contact.form.sending') || 'جاري الإرسال...');
+    setStatus('');
     try {
-      const form = e.currentTarget;
-      const formDataObj = new FormData(form);
-      formDataObj.append('access_key', '1118c6ef-5c3c-4954-b7d2-bc7b64df9935'); // ضع مفاتيحك هنا
-
-      // ممكن إضافة حقول مخفية مثلاً:
-      // formDataObj.append('subject', 'New Contact Form Submission');
-
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch('https://formspree.io/f/xqkrbzkw', {
         method: 'POST',
-        body: formDataObj
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
-      const data = await response.json();
-
-      if (data.success) {
+      if (response.ok) {
         setStatus(t('contact.form.success'));
         setFormData({ name: '', email: '', message: '' });
-        form.reset(); // إعادة تعيين الحقول
       } else {
-        console.error('Web3Forms error:', data);
         setStatus(t('contact.form.error'));
       }
     } catch (error) {
-      console.error('Catch error:', error);
       setStatus(t('contact.form.error'));
     }
   };
@@ -71,9 +60,9 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="relative min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white px-6 py-28 overflow-hidden"
+      className="relative min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white px-6 py-32 overflow-hidden"
     >
-      {/* بعض العناصر العائمة / الخلفية */}
+      {/* Animated Background Elements */}
       <motion.div
         className="absolute top-16 left-8 w-72 h-72 bg-yellow-500/10 rounded-full blur-3xl"
         animate={{ y: [0, -20, 0] }}
@@ -92,9 +81,9 @@ const Contact = () => {
         custom={0.1}
       />
 
-      {/* العنوان */}
+      {/* Title */}
       <motion.h1
-        className="text-5xl sm:text-6xl font-extrabold text-center mb-14 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 drop-shadow-lg"
+        className="text-4xl sm:text-6xl font-extrabold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 drop-shadow-lg"
         variants={fadeInUp}
         initial="hidden"
         whileInView="visible"
@@ -104,7 +93,7 @@ const Contact = () => {
         {t('contact.title')}
       </motion.h1>
 
-      {/* نص توضيحي */}
+      {/* Intro Text */}
       <motion.p
         className="max-w-xl mx-auto text-center text-sm sm:text-base text-white/80 mb-12 px-4"
         variants={fadeInUp}
@@ -116,7 +105,7 @@ const Contact = () => {
         {t('contact.intro')}
       </motion.p>
 
-      {/* بطاقات التواصل الرئيسية */}
+      {/* Contact Info Cards */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto mb-14"
         variants={fadeInUp}
@@ -125,7 +114,6 @@ const Contact = () => {
         viewport={{ once: true }}
         custom={0.3}
       >
-        {/* بريد / هاتف / واتساب / حجز */}
         {[
           {
             icon: <Mail className="w-5 h-5" />,
@@ -137,7 +125,7 @@ const Contact = () => {
             icon: <Phone className="w-5 h-5" />,
             label: t('contact.infoCards.phone'),
             link: 'tel:+972599358641',
-            text: <span dir="ltr">+972 599 358641</span>,
+            text: '+972 599 358641',
           },
           {
             icon: <MessageCircle className="w-5 h-5" />,
@@ -168,12 +156,49 @@ const Contact = () => {
         ))}
       </motion.div>
 
-      {/* هنا لا تنسَ قسم الروابط الاجتماعية (لو لديك) */}
-      {/* ... */}
+      {/* Social Media Links */}
+      <motion.div
+        className="max-w-sm mx-auto flex items-center justify-center gap-6 mb-16"
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        custom={0.35}
+      >
+        {[
+          {
+            icon: <Facebook className="w-6 h-6" />,
+            link: 'https://www.facebook.com/jihad.shojaeha',
+            label: t('contact.socialMedia.facebook'),
+          },
+          {
+            icon: <Instagram className="w-6 h-6" />,
+            link: 'https://www.instagram.com/jihad.shojaeha/?hl=en',
+            label: t('contact.socialMedia.instagram'),
+          },
+          {
+            icon: <Linkedin className="w-6 h-6" />,
+            link: 'https://www.linkedin.com/in/jihad-shojaeha/',
+            label: t('contact.socialMedia.linkedin'),
+          },
+        ].map((item, i) => (
+          <a
+            key={i}
+            href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/60 hover:text-white transition duration-200 flex flex-col items-center"
+            aria-label={item.label}
+          >
+            {item.icon}
+            <span className="mt-1 text-xs">{item.label}</span>
+          </a>
+        ))}
+      </motion.div>
 
-      {/* نموذج التواصل باستخدام Web3Forms */}
+      {/* Contact Form */}
       <motion.form
-        onSubmit={onSubmit}
+        onSubmit={handleSubmit}
         className="bg-white/5 border border-white/10 backdrop-blur-md p-8 sm:p-10 rounded-2xl shadow-2xl max-w-3xl mx-auto space-y-6"
         variants={fadeInUp}
         initial="hidden"
@@ -187,7 +212,7 @@ const Contact = () => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            placeholder={t('contact.form.fullName') || ''}
+            placeholder={t('contact.form.fullName') ?? ''}
             className="w-full bg-transparent border border-white/20 text-white placeholder-white/60 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
             required
           />
@@ -196,7 +221,7 @@ const Contact = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder={t('contact.form.email') || ''}
+            placeholder={t('contact.form.email') ?? ''}
             className="w-full bg-transparent border border-white/20 text-white placeholder-white/60 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
             required
           />
@@ -206,7 +231,7 @@ const Contact = () => {
           value={formData.message}
           onChange={handleChange}
           rows={5}
-          placeholder={t('contact.form.message') || ''}
+          placeholder={t('contact.form.message') ?? ''}
           className="w-full bg-transparent border border-white/20 text-white placeholder-white/60 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
           required
         />
