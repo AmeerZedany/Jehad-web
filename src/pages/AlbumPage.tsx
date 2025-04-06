@@ -1,255 +1,243 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import {
-  Mail,
-  Phone,
-  Calendar,
-  Send,
-  MessageCircle,
-  Facebook,
-  Instagram,
-  Linkedin,
-} from 'lucide-react';
+import { useEffect, useState, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowUp } from 'lucide-react';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
-const fadeInUp = {
-  hidden: { opacity: 0, y: 50 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] },
-  }),
-};
+const endpoint =
+  'https://opensheet.elk.sh/17nDf92K92d1y0ikBY_hUMjQ-ow7Z24QArToW6SFoW64/Sheet1';
 
-const Contact = () => {
+interface Image {
+  name: string;
+  url: string;
+}
+
+function getThumbnail(url: string) {
+  return url.includes('&sz=') ? url : `${url}&sz=w500`;
+}
+
+function stripExtension(filename: string) {
+  return filename.replace(/\.[^/.]+$/, '');
+}
+
+const CACHE_KEY = 'cached_album_images';
+const CACHE_EXPIRY_KEY = 'cached_album_images_expiry';
+const CACHE_TTL = 1000 * 60 * 60 * 12; // 12 hours
+
+const AlbumPage = () => {
+  const [images, setImages] = useState<Image[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const { t } = useTranslation();
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  });
-  const [status, setStatus] = useState('');
+  useEffect(() => {
+    const fetchImages = async () => {
+      const now = Date.now();
+      const cached = localStorage.getItem(CACHE_KEY);
+      const expiry = localStorage.getItem(CACHE_EXPIRY_KEY);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setStatus('');
-    try {
-      const response = await fetch('https://formspree.io/f/xqkrbzkw', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        setStatus(t('contact.form.success'));
-        setFormData({ name: '', email: '', message: '' });
-      } else {
-        setStatus(t('contact.form.error'));
+      if (cached && expiry && now < parseInt(expiry)) {
+        setImages(JSON.parse(cached));
+        setLoading(false);
+        return;
       }
-    } catch (error) {
-      setStatus(t('contact.form.error'));
+
+      try {
+        const response = await axios.get<Array<{ Name: string; 'Image URL': string }>>(endpoint);
+        const data = response.data;
+
+        const mapped: Image[] = data.map((row) => ({
+          name: row.Name,
+          url: row['Image URL'],
+        }));
+
+        localStorage.setItem(CACHE_KEY, JSON.stringify(mapped));
+        localStorage.setItem(CACHE_EXPIRY_KEY, (now + CACHE_TTL).toString());
+
+        setImages(mapped);
+      } catch (err) {
+        console.error('❌ خطأ في تحميل الصور من Google Sheet:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchImages();
+  }, []);
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      setSelectedImage(null);
     }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <section
-      id="contact"
-      className="relative min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white px-6 py-32 overflow-hidden"
+    <motion.div
+      className="bg-gradient-to-br from-white via-gray-50 to-blue-50 px-4 sm:px-6 lg:px-20 py-20 sm:py-24 min-h-screen text-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.7 }}
     >
-      {/* Animated Background Elements */}
-      <motion.div
-        className="absolute top-16 left-8 w-72 h-72 bg-yellow-500/10 rounded-full blur-3xl"
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute bottom-16 right-8 w-72 h-72 bg-orange-500/10 rounded-full blur-3xl"
-        animate={{ y: [0, 20, 0] }}
-        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute inset-0 bg-[url('/grid.svg')] opacity-5 pointer-events-none"
-        initial="hidden"
-        animate="visible"
-        variants={fadeInUp}
-        custom={0.1}
-      />
-
-      {/* Title */}
       <motion.h1
-        className="text-4xl sm:text-6xl font-extrabold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 drop-shadow-lg"
-        variants={fadeInUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        custom={0.2}
+        className="text-3xl sm:text-5xl font-extrabold text-blue-700 mb-3 tracking-tight drop-shadow-sm"
+        initial={{ y: -30, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
       >
-        {t('contact.title')}
+        📷 {t('gallery.title')}
       </motion.h1>
 
-      {/* Intro Text */}
       <motion.p
-        className="max-w-xl mx-auto text-center text-sm sm:text-base text-white/80 mb-12 px-4"
-        variants={fadeInUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        custom={0.25}
+        className="text-base sm:text-lg text-gray-600 mb-10 sm:mb-12 max-w-md sm:max-w-2xl mx-auto"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5, duration: 1 }}
       >
-        {t('contact.intro')}
+        {t('gallery.description')}
       </motion.p>
 
-      {/* Contact Info Cards */}
-      <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-5xl mx-auto mb-14"
-        variants={fadeInUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        custom={0.3}
-      >
-        {[
-          {
-            icon: <Mail className="w-5 h-5" />,
-            label: t('contact.infoCards.email'),
-            link: 'mailto:jihadxp@gmail.com',
-            text: 'jihadxp@gmail.com',
-          },
-          {
-            icon: <Phone className="w-5 h-5" />,
-            label: t('contact.infoCards.phone'),
-            link: 'tel:+972599358641',
-            text: '+972 599 358641',
-          },
-          {
-            icon: <MessageCircle className="w-5 h-5" />,
-            label: t('contact.infoCards.whatsapp'),
-            link: 'https://wa.me/972599358641',
-            text: t('contact.infoCards.whatsapp'),
-          },
-          {
-            icon: <Calendar className="w-5 h-5" />,
-            label: t('contact.infoCards.booking'),
-            link: 'https://calendly.com/jihad_coach/jihad_coach1',
-            text: t('contact.infoCards.booking'),
-          },
-        ].map((item, idx) => (
-          <a
-            key={idx}
-            href={item.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-4 p-6 rounded-xl bg-white/5 hover:bg-white/10 transition border border-white/10 backdrop-blur-md shadow-xl hover:scale-[1.02] duration-300"
-          >
-            <div className="text-yellow-400">{item.icon}</div>
-            <div>
-              <p className="text-sm font-semibold text-white/90">{item.label}</p>
-              <p className="text-sm text-white/60 break-words">{item.text}</p>
-            </div>
-          </a>
-        ))}
-      </motion.div>
-
-      {/* Social Media Links */}
-      <motion.div
-        className="max-w-sm mx-auto flex items-center justify-center gap-6 mb-16"
-        variants={fadeInUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        custom={0.35}
-      >
-        {[
-          {
-            icon: <Facebook className="w-6 h-6" />,
-            link: 'https://www.facebook.com/jihad.shojaeha',
-            label: t('contact.socialMedia.facebook'),
-          },
-          {
-            icon: <Instagram className="w-6 h-6" />,
-            link: 'https://www.instagram.com/jihad.shojaeha/?hl=en',
-            label: t('contact.socialMedia.instagram'),
-          },
-          {
-            icon: <Linkedin className="w-6 h-6" />,
-            link: 'https://www.linkedin.com/in/jihad-shojaeha/',
-            label: t('contact.socialMedia.linkedin'),
-          },
-        ].map((item, i) => (
-          <a
-            key={i}
-            href={item.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white/60 hover:text-white transition duration-200 flex flex-col items-center"
-            aria-label={item.label}
-          >
-            {item.icon}
-            <span className="mt-1 text-xs">{item.label}</span>
-          </a>
-        ))}
-      </motion.div>
-
-      {/* Contact Form */}
-      <motion.form
-        onSubmit={handleSubmit}
-        className="bg-white/5 border border-white/10 backdrop-blur-md p-8 sm:p-10 rounded-2xl shadow-2xl max-w-3xl mx-auto space-y-6"
-        variants={fadeInUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        custom={0.4}
-      >
-        <div className="grid sm:grid-cols-2 gap-6">
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder={t('contact.form.fullName') ?? ''}
-            className="w-full bg-transparent border border-white/20 text-white placeholder-white/60 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder={t('contact.form.email') ?? ''}
-            className="w-full bg-transparent border border-white/20 text-white placeholder-white/60 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            required
+      {loading ? (
+        <div className="flex justify-center items-center py-20">
+          <motion.div
+            className="w-12 h-12 border-[5px] border-blue-600 border-t-transparent rounded-full animate-spin"
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
           />
         </div>
-        <textarea
-          name="message"
-          value={formData.message}
-          onChange={handleChange}
-          rows={5}
-          placeholder={t('contact.form.message') ?? ''}
-          className="w-full bg-transparent border border-white/20 text-white placeholder-white/60 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          required
-        />
-        <button
-          type="submit"
-          className="flex items-center justify-center gap-2 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-black font-bold px-6 py-3 rounded-full shadow-md transition-all duration-300 w-full sm:w-auto mx-auto"
+      ) : images.length === 0 ? (
+        <motion.p
+          className="text-red-500 text-base sm:text-lg"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
-          <Send className="w-5 h-5" />
-          {t('contact.form.button')}
-        </button>
-        {status && (
-          <p className="text-center text-sm text-white/80 mt-4 animate-pulse">
-            {status}
-          </p>
+          😢 لا توجد صور متاحة حالياً.
+        </motion.p>
+      ) : (
+        <motion.div
+          className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 lg:gap-8"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.06,
+              },
+            },
+          }}
+        >
+          {images.map((img, idx) => {
+            const thumb = getThumbnail(img.url);
+
+            return (
+              <motion.div
+                key={idx}
+                className="relative group rounded-xl overflow-hidden shadow-xl cursor-pointer bg-white transition duration-700 ease-in-out hover:shadow-[0_8px_30px_rgba(0,118,255,0.35)]"
+                variants={{
+                  hidden: { opacity: 0, scale: 0.95 },
+                  visible: { opacity: 1, scale: 1 },
+                }}
+                whileHover={{ scale: 1.05 }}
+                onClick={() => setSelectedImage(img)}
+              >
+                <motion.img
+                  src={thumb}
+                  alt={img.name}
+                  className="w-full h-44 sm:h-52 lg:h-60 object-cover transition-transform duration-700 ease-in-out"
+                  loading="lazy"
+                  onError={(e) => {
+                    console.error(`❌ فشل تحميل الصورة: ${img.name}`, thumb);
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+
+                <div className="absolute bottom-0 left-0 right-0 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/60 backdrop-blur-xl text-black font-semibold text-xs sm:text-sm opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out">
+                  {stripExtension(img.name)}
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      )}
+
+      <AnimatePresence>
+        {selectedImage && (
+          <motion.div
+            className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              className="bg-white rounded-2xl overflow-hidden max-w-full sm:max-w-5xl w-full relative border border-blue-200 shadow-[0_0_100px_rgba(0,0,0,0.5)]"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.5 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <motion.img
+                key={selectedImage.url}
+                src={selectedImage.url}
+                alt={selectedImage.name}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.6 }}
+                className="w-full h-auto object-contain max-h-[80vh] sm:max-h-[90vh]"
+              />
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 bg-black/70 text-white px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-lg font-semibold backdrop-blur-md shadow-inner"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.5 }}
+              >
+                {stripExtension(selectedImage.name)}
+              </motion.div>
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute top-2 right-2 sm:top-3 sm:right-3 text-black bg-white/80 backdrop-blur-md p-2 rounded-full shadow hover:scale-110 transition"
+                aria-label="إغلاق الصورة"
+              >
+                ✕
+              </button>
+            </motion.div>
+          </motion.div>
         )}
-      </motion.form>
-    </section>
+      </AnimatePresence>
+
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-blue-600 text-white shadow-2xl hover:bg-blue-700 hover:scale-105 transition-all duration-300"
+          aria-label="العودة للأعلى"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
+      )}
+    </motion.div>
   );
 };
 
-export default Contact;
+export default AlbumPage;
