@@ -118,11 +118,12 @@
             "suffix": "+"
           },
           {
-            "icon": "👥",
+            "icon": "🧑‍🤝‍🧑",
             "number": "10000",
             "label": "Trained Participants",
             "suffix": "+"
           },
+          
           {
             "icon": "🌍",
             "number": "8",

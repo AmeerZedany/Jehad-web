@@ -7,13 +7,13 @@ const About = () => {
   const isRTL = i18n.language === 'ar';
 
   return (
-    <section 
-      className="relative bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#3b0764] text-white py-24 px-6 md:px-24 min-h-screen overflow-hidden" 
+     
+    <section className="relative bg-gradient-to-b from-[#0f172a] to-[#000] text-white py-24 px-6 md:px-24 min-h-screen overflow-hidden"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      {/* Soft Background Blobs */}
-      <div className="absolute w-[480px] h-[480px] bg-indigo-700 opacity-10 rounded-full blur-[180px] top-[-100px] left-[-150px]" />
-      <div className="absolute w-[400px] h-[400px] bg-pink-600 opacity-10 rounded-full blur-[160px] bottom-[-80px] right-[-120px]" />
+      {/* خلفيات ضبابية ناعمة */}
+      <div className="absolute w-[480px] h-[480px] bg-[#63b3ed] opacity-10 rounded-full blur-[180px] top-[-100px] left-[-150px]" />
+      <div className="absolute w-[400px] h-[400px] bg-[#3182ce] opacity-10 rounded-full blur-[160px] bottom-[-80px] right-[-120px]" />
 
       <motion.div
         className="relative z-10 max-w-5xl mx-auto space-y-14"
@@ -21,12 +21,12 @@ const About = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
-        {/* Title */}
-        <h1 className="text-4xl sm:text-5xl font-extrabold text-orange-400 drop-shadow-xl leading-tight text-center">
+        {/* ✅ العنوان الرئيسي مع تدرج أزرق */}
+        <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#63b3ed] to-[#3182ce] drop-shadow-xl leading-tight text-center">
           {t('about.title')}
         </h1>
 
-        {/* Main Info Box */}
+        {/* صندوق المحتوى الرئيسي */}
         <motion.div
           className="bg-white/5 p-6 md:p-10 rounded-2xl backdrop-blur-md border border-white/10 shadow-xl space-y-6"
           initial={{ opacity: 0, y: 20 }}
@@ -37,28 +37,28 @@ const About = () => {
             {t('about.mainDescription')}
           </p>
 
-          {/* Stats Icons */}
+          {/* ✅ الإحصائيات مع ألوان زرقاء متدرجة */}
           <div className="grid sm:grid-cols-2 gap-6 pt-4">
-            <div className="flex items-start gap-4">
-              <FaChalkboardTeacher className="text-yellow-400 text-3xl" />
+            <div className="flex items-start gap-4 group">
+              <FaChalkboardTeacher className="text-[#63b3ed] text-3xl group-hover:text-[#3182ce] transition-colors duration-300" />
               <p className="text-gray-100">
                 {t('about.stats.trainingHours')}
               </p>
             </div>
-            <div className="flex items-start gap-4">
-              <FaUsers className="text-blue-400 text-3xl" />
+            <div className="flex items-start gap-4 group">
+              <FaUsers className="text-[#63b3ed] text-3xl group-hover:text-[#3182ce] transition-colors duration-300" />
               <p className="text-gray-100">
                 {t('about.stats.trainees')}
               </p>
             </div>
-            <div className="flex items-start gap-4">
-              <FaHandshake className="text-green-400 text-3xl" />
+            <div className="flex items-start gap-4 group">
+              <FaHandshake className="text-[#63b3ed] text-3xl group-hover:text-[#3182ce] transition-colors duration-300" />
               <p className="text-gray-100">
                 {t('about.stats.partnerships')}
               </p>
             </div>
-            <div className="flex items-start gap-4">
-              <FaAward className="text-purple-400 text-3xl" />
+            <div className="flex items-start gap-4 group">
+              <FaAward className="text-[#63b3ed] text-3xl group-hover:text-[#3182ce] transition-colors duration-300" />
               <p className="text-gray-100">
                 {t('about.stats.awards')}
               </p>
@@ -66,7 +66,7 @@ const About = () => {
           </div>
         </motion.div>
 
-        {/* Additional Details */}
+        {/* ✅ باقي التفاصيل */}
         <motion.div
           className="space-y-6"
           initial={{ opacity: 0, y: 20 }}
@@ -77,7 +77,8 @@ const About = () => {
             {t('about.collaborations')}
           </p>
 
-          <p className="text-lg md:text-xl text-gray-300 leading-relaxed bg-white/5 p-5 rounded-lg border-r-4 border-orange-500 shadow-md">
+          {/* ✅ تغيير اللون الجانبي من برتقالي لأزرق */}
+          <p className="text-lg md:text-xl text-gray-300 leading-relaxed bg-white/5 p-5 rounded-lg border-r-4 border-[#3182ce] shadow-md">
             {t('about.recentFocus')}
           </p>
 

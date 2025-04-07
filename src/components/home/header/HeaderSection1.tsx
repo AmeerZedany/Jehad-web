@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Typewriter } from 'react-simple-typewriter';
 import { FaTelegramPlane, FaWhatsapp } from 'react-icons/fa';
 import jehadHeader from '../../../assets/jehad-header2.png';
+import { Link } from 'react-router-dom';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 50 },
@@ -107,7 +108,7 @@ const HeaderSection1 = () => {
           variants={fadeInUp}
           custom={0.6}
         >
-          <HeaderButton href="#services" variant="blue">
+          <HeaderButton to="/services" variant="blue">
             {t('headerSection1.btnServices')}
             <ArrowRight className="w-4 h-4 ml-2" />
           </HeaderButton>
@@ -181,19 +182,30 @@ const AnimatedNumber = ({ value, duration = 2000, suffix = '', resetKey }: any) 
 
   return <>{display}{suffix}</>;
 };
-
-const HeaderButton = memo(({ href, children, variant, external, icon }: any) => {
+const HeaderButton = memo(({ href, to, children, variant, external, icon }: any) => {
   const styles: any = {
-    blue: 'bg-[#3182ce] text-white hover:bg-blue-600',
+    blue: 'bg-[#63b3ed] text-white hover:bg-[#4299e1]',
     white: 'bg-white text-black hover:bg-gray-100',
     whatsapp: 'bg-green-600 text-white hover:bg-green-700',
     telegram: 'bg-blue-500 text-white hover:bg-blue-600',
   };
 
+  const commonClasses = `px-5 py-3 rounded-full font-semibold flex items-center transition-all duration-300 ${styles[variant]}`;
+
+  if (to) {
+    // React Router Link
+    return (
+      <Link to={to} className={commonClasses}>
+        {icon && <span className="mr-2">{icon}</span>}
+        {children}
+      </Link>
+    );
+  }
+
   return (
     <a
       href={href}
-      className={`px-5 py-3 rounded-full font-semibold flex items-center transition-all duration-300 ${styles[variant]}`}
+      className={commonClasses}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
     >
