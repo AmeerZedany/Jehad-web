@@ -20,11 +20,11 @@ const Navbar = () => {
   useEffect(() => setIsOpen(false), [location.pathname]);
 
   const navLinks = [
-    { name: t('home'), path: '/' },
-    { name: t('about'), path: '/about' },
-    { name: t('services'), path: '/services' },
-    { name: t('contact0'), path: '/contact' },
-    { name: t('album'), path: '/album' },
+    { name: t('homeNAV'), path: '/' },
+    { name: t('aboutNAV'), path: '/about' },
+    { name: t('servicesNAV'), path: '/services' },
+    { name: t('contactNAV'), path: '/contact' },
+    { name: t('albumNAV'), path: '/album' },
    
   ];
 
@@ -66,18 +66,22 @@ const Navbar = () => {
           </motion.div>
 
           <motion.span
-  className="text-white text-3xl sm:text-4xl tracking-wide whitespace-nowrap"
+  className="text-white text-[28px] sm:text-[34px] whitespace-nowrap"
   style={{
     fontFamily: '"Great Vibes", cursive',
-    letterSpacing: '0.5px',
-    textShadow: '0 1px 3px rgba(255,255,255,0.5)',
+    fontWeight: 400,
+    textShadow: '0 1px 1px rgba(255,255,255,0.15)',
+    opacity: 0.9,
+    letterSpacing: '0.2px',
   }}
-  initial={{ opacity: 0, x: -10 }}
+  initial={{ opacity: 0, x: -5 }}
   animate={{ opacity: 1, x: 0 }}
   transition={{ duration: 0.7, delay: 0.2 }}
 >
-  {t('name')}
+  Jehad Shojaeha
 </motion.span>
+
+
 
         </Link>
 

@@ -33,28 +33,17 @@ const AlbumPage = () => {
 
   useEffect(() => {
     const fetchImages = async () => {
-      const now = Date.now();
-      const cached = localStorage.getItem(CACHE_KEY);
-      const expiry = localStorage.getItem(CACHE_EXPIRY_KEY);
-
-      if (cached && expiry && now < parseInt(expiry)) {
-        setImages(JSON.parse(cached));
-        setLoading(false);
-        return;
-      }
-
+      setLoading(true);
+  
       try {
         const response = await axios.get<Array<{ Name: string; 'Image URL': string }>>(endpoint);
         const data = response.data;
-
+  
         const mapped: Image[] = data.map((row) => ({
           name: row.Name,
           url: row['Image URL'],
         }));
-
-        localStorage.setItem(CACHE_KEY, JSON.stringify(mapped));
-        localStorage.setItem(CACHE_EXPIRY_KEY, (now + CACHE_TTL).toString());
-
+  
         setImages(mapped);
       } catch (err) {
         console.error('❌ خطأ في تحميل الصور من Google Sheet:', err);
@@ -62,9 +51,14 @@ const AlbumPage = () => {
         setLoading(false);
       }
     };
-
+  
+    // Clear the cache explicitly (in case it was previously stored)
+    localStorage.removeItem('cached_album_images');
+    localStorage.removeItem('cached_album_images_expiry');
+  
     fetchImages();
   }, []);
+  
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape') {

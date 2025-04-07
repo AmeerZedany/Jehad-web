@@ -1,11 +1,94 @@
 {
-    "home": "Home",
-    "about": "About",
-    "services": "Services",
-    "testimonials": "Testimonials",
-    "contact0": "Contact",
+    "homeNAV": "Home",
+    "aboutNAV": "About",
+    "servicesNAV": "Services",
+    "contactNAV": "Contact",
+    "albumNAV": "Album",
+    "about": {
+      "title": "Discover the Expertise of Trainer Jihad Shojaeha",
+      "mainDescription": "Jihad Shojaeha is a trainer and consulting expert with extensive international experience, delivering thousands of training hours across Palestine, Arab countries, and Europe, including: Jordan, Lebanon, Tunisia, Iraq, Sudan, Netherlands, and Germany",
+      "stats": {
+        "trainingHours": "More than 15,000 training hours",
+        "trainees": "More than 10,000 trainees",
+        "partnerships": "Partnerships with organizations like EFE, GIZ, JICA, World Bank",
+        "awards": "Recipient of local and international awards for his contributions"
+      },
+      "collaborations": "Jihad has collaborated with prestigious global institutions such as: Education For Employment (EFE), JICA, GIZ, World Bank, and Swedish Development Agency, in addition to prominent local community institutions",
+      "recentFocus": "In recent years, he has focused on supporting ambitious trainers through effective strategies to secure contracts with local and international institutions and master the paid training market",
+      "conclusion": "Whether you're a trainer starting your journey or a professional looking to expand... Jihad Shojaeha is your true partner for confidently moving towards success"
+    },
+    "vision": {
+      "title": "My Vision",
+      "content": "Empowering trainers to transform their expertise into a sustainable income source through paid training and consulting services"
+    },
+    "mission": {
+      "title": "My Mission",
+      "content": "Providing high-quality training and consulting programs that help trainers succeed in the paid training market and build their professional careers"
+    },
+    "expertise": {
+      "title": "Areas of Expertise",
+      "items": [
+        "Training of Trainers (TOT) & American Board Certification",
+        "Individual Consulting and Coaching for Trainers",
+        "Development of Training Programs for Organizations",
+        "Capacity Building and Skills Development",
+        "Strategic Planning and Project Management",
+        "Training Curriculum Development"
+      ]
+    },
+    "achievements": {
+      "title": "Key Achievements",
+      "items": [
+        "Trained over 10,000 participants",
+        "Delivered more than 15,000 training hours",
+        "Worked in 8+ Arab and European countries",
+        "Executed over 100 training contracts",
+        "Developed numerous accredited training programs",
+        "Built partnerships with prestigious international institutions"
+      ]
+    },
+    "approach": {
+      "title": "My Working Approach",
+      "items": [
+        "Focus on practical results and application",
+        "Custom solutions for each trainee and organization",
+        "Using latest training methods and tools",
+        "Continuous follow-up and post-training support",
+        "Ongoing development and content updates",
+        "Building long-term relationships with trainees"
+      ]
+    },
+    "services": {
+      "title": "My Training & Consulting Services",
+      "cards": [
+        {
+          "title": "Training of Trainers (TOT)",
+          "content": [
+            "🔸 American Board certified course available via Zoom or recorded sessions.",
+            "🔸 Professional introduction to training from needs analysis to practical projects.",
+            "🔸 Includes creative facilitation, e-training, and international certification with practical application."
+          ]
+        },
+        {
+          "title": "Individual Consulting & Guidance",
+          "content": [
+            "🔸 8-stage individual program over 4 months guiding trainers step by step.",
+            "🔸 Covers field selection, personal branding, identity building, and networking.",
+            "🔸 Professional technical and financial proposal preparation for training contracts."
+          ]
+        },
+        {
+          "title": "Corporate Training Programs",
+          "content": [
+            "🔸 Tailored programs for team development including 21st century skills.",
+            "🔸 Skills like critical thinking, leadership, collaboration, emotional intelligence, and career planning.",
+            "🔸 In-house trainer development for managing interactive and impactful sessions."
+          ]
+        }
+      ]
+    },
     "name": "Jihad Shojaeha",
-    "album": "Album",
+    
 
     
       "headerSection1": {
@@ -24,31 +107,31 @@
         "stats": [
           {
             "icon": "⭐",
-            "number": "15+",
+            "number": "15",
             "label": "Years of Experience",
             "suffix": "+"
           },
           {
             "icon": "🕒",
-            "number": "15000+",
+            "number": "15000",
             "label": "Training Hours",
             "suffix": "+"
           },
           {
             "icon": "👥",
-            "number": "10000+",
+            "number": "10000",
             "label": "Trained Participants",
             "suffix": "+"
           },
           {
             "icon": "🌍",
-            "number": "8+",
+            "number": "8",
             "label": "Countries (Arab & European)",
             "suffix": "+"
           },
           {
             "icon": "📄",
-            "number": "100+",
+            "number": "100",
             "label": "Training Contracts",
             "suffix": "+"
           }
@@ -57,12 +140,14 @@
     
     
 
-    "footer": {
-      "quote": "When you master your skills, your life transforms... I'm here to help you make that transformation.",
-      "ready": "Are you ready to start your journey?",
-      "whatsapp": "Contact via WhatsApp",
-      "rights": "All rights reserved - Jihad Shojaeha"
-    },
+      
+      "footer": {
+        "ctaLine1": "Are you ready to start your journey?",
+        "ctaLine2": "Enter the world of paid training and training contracts.",
+        "whatsapp": "Contact us on WhatsApp",
+        "rights": "All rights reserved.",
+        "terms": "Privacy Policy & Terms of Use"
+      },
 
     "headerSection2": {
     "title": "Jihad Shojaeha",
@@ -78,7 +163,8 @@
     "focus": {
       "title": "Modern Focus",
       "description": "Supporting ambitious trainers to break into the paid training market and secure contracts with local and international institutions using practical tools and strategies."
-    } 
+    },
+    "readMore":"Read More"
   },
 
   "headerSection3": {
@@ -95,7 +181,7 @@
     "title": "Consulting and Individual Coaching",
     "items": [
       "Professional guidance to enter the world of paid training",
-      "Building the trainer’s personal brand",
+      "Building the trainer's personal brand",
       "Developing technical and financial proposals"
     ]
   },
@@ -116,7 +202,7 @@
   
     "contact": {
       "title": "Get in Touch",
-      "intro": "We’re waiting for your messages and suggestions. Share your thoughts or book a session for collaboration and training.",
+      "intro": "We're waiting for your messages and suggestions. Share your thoughts or book a session for collaboration and training.",
       "infoCards": {
         "email": "Email",
         "phone": "Phone",
@@ -138,6 +224,6 @@
       },
       "noText": "No images available."
     }
+  }
+
   
-  
-}

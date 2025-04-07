@@ -24,13 +24,12 @@ const Footer = () => {
       >
         {/* CTA */}
         <div className="flex flex-col items-center gap-3 text-center text-sm sm:text-base leading-relaxed px-2">
-          <p className="text-white/90 font-medium">
-            هل أنت مستعد لتبدأ رحلتك؟ <br />
-            <span className="text-blue-400 font-semibold">
-              لدخول عالم التدريب المدفوع والعقود التدريبية.
-            </span>
-          </p>
-
+        <p className="text-white/90 font-medium">
+          {t('footer.ctaLine1')} <br />
+          <span className="text-blue-400 font-semibold">
+            {t('footer.ctaLine2')}
+          </span>
+        </p>
           <motion.a
             href="https://wa.me/972599358641"
             target="_blank"
@@ -44,7 +43,7 @@ const Footer = () => {
               alt="WhatsApp"
               className="w-4 h-4"
             />
-            تواصل معنا على واتساب
+            {t('footer.whatsapp')}
           </motion.a>
         </div>
 

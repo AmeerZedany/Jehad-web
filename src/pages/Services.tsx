@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Lightbulb, Star, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 50 },
@@ -18,10 +19,14 @@ const icons = [
 ];
 
 const Services = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
+
   return (
     <section
       id="services"
       className="relative min-h-screen bg-gradient-to-br from-[#0f0c29] via-[#302b63] to-[#24243e] text-white px-6 py-32 overflow-hidden"
+      dir={isRTL ? 'rtl' : 'ltr'}
     >
       {/* Floating Circles */}
       <motion.div
@@ -51,7 +56,7 @@ const Services = () => {
         viewport={{ once: true }}
         custom={0.2}
       >
-        خدماتي التدريبية والاستشارية
+        {t('services.title')}
       </motion.h1>
 
       {/* Service Cards */}
@@ -63,32 +68,7 @@ const Services = () => {
         viewport={{ once: true }}
         custom={0.3}
       >
-        {[
-          {
-            title: 'برنامج تدريب المدربين (TOT)',
-            content: [
-              '🔸 دورة معتمدة من البورد الأمريكي تُقدَّم عبر زووم أو بنسخة مسجلة.',
-              '🔸 مدخل احترافي لعالم التدريب يبدأ بتحليل الاحتياجات وينتهي بالمشاريع العملية.',
-              '🔸 يشمل التفاعل والتيسير الإبداعي، التدريب الإلكتروني، وشهادة دولية مع فرصة تطبيق عملي.',
-            ],
-          },
-          {
-            title: 'الاستشارات والتوجيه الفردي للمدربين',
-            content: [
-              '🔸 برنامج فردي من 8 مراحل على مدار 4 أشهر لمرافقة المدرب خطوة بخطوة.',
-              '🔸 يشمل تحديد المجال التدريبي، تسويق الذات، بناء الهوية، وتوسيع شبكة العلاقات.',
-              '🔸 يتناول كيفية إعداد عروض فنية ومالية احترافية والمنافسة على العقود التدريبية.',
-            ],
-          },
-          {
-            title: 'البرامج التدريبية للمؤسسات والشركات',
-            content: [
-              '🔸 برامج مخصصة لتطوير الفرق داخل المؤسسات وتشمل مهارات القرن 21.',
-              '🔸 مهارات مثل التفكير النقدي، القيادة، التعاون، الذكاء العاطفي، والتخطيط المهني.',
-              '🔸 أيضًا برامج تطوير المدربين داخل المؤسسة لإدارة جلسات تفاعلية ومؤثرة.',
-            ],
-          },
-        ].map((item, idx) => (
+        {(t('services.cards', { returnObjects: true }) as any[]).map((item, idx) => (
           <motion.div
             key={idx}
             className="bg-white/5 border border-white/10 backdrop-blur-xl rounded-3xl p-8 sm:p-10 shadow-2xl hover:scale-[1.01] transition-all duration-300 group"
@@ -105,7 +85,7 @@ const Services = () => {
               </h2>
             </div>
             <ul className="space-y-4 text-white/80 text-lg sm:text-xl leading-relaxed">
-              {item.content.map((point, i) => (
+              {item.content.map((point: string, i: number) => (
                 <li key={i} className="flex items-start">
                   <span>{point}</span>
                 </li>
