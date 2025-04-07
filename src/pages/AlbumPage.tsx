@@ -95,7 +95,6 @@ const AlbumPage = () => {
     }
   };
 
-
   return (
     <motion.div
       className="bg-gradient-to-br from-white via-gray-50 to-blue-50 px-4 sm:px-6 lg:px-20 py-20 sm:py-24 min-h-screen text-center"

@@ -1,12 +1,9 @@
-import React from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FaGraduationCap, FaLightbulb, FaBuilding } from 'react-icons/fa';
 
 const HeaderSection3 = () => {
-  const { t, i18n } = useTranslation();
-  const shouldReduceMotion = useReducedMotion();
-  const isArabic = i18n.language === 'ar';
+  const { t } = useTranslation();
 
   // Animation variants
   const containerVariants = {

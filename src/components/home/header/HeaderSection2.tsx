@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { FaBook, FaGlobe, FaBullseye } from 'react-icons/fa';
@@ -23,14 +22,6 @@ const HeaderSection2 = () => {
       opacity: 1,
       y: 0,
       transition: { duration: 0.6, ease: 'easeOut' },
-    },
-  };
-
-  const underlineVariants = {
-    hidden: { scaleX: 0 },
-    visible: {
-      scaleX: 1,
-      transition: { duration: 0.8, ease: 'easeOut' },
     },
   };
 
