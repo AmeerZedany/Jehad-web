@@ -60,51 +60,49 @@ const HeaderSection2 = () => {
       >
         {/* Signature Logo Block */}
         <motion.div
-  className="relative inline-block w-full px-4"
-  variants={itemVariants}
->
-  <motion.div
-    className={`
-      relative z-10 flex flex-col sm:flex-row items-center justify-center
-      gap-4 sm:gap-6
-      p-6
-      bg-white border border-gray-200
-      rounded-2xl shadow-2xl
-      max-w-xl mx-auto
-      transition-all duration-300
-      ${isArabic ? 'sm:flex-row-reverse text-right' : 'text-left'}
-    `}
-    initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8, ease: 'easeOut' }}
-  >
-    {/* Logo */}
-    <motion.img
-      src={jehadHeader}
-      alt="Jehad Logo"
-      className="h-12 sm:h-16 md:h-20 w-auto object-contain"
-      animate={{ y: [0, -2, 0] }}
-      transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
-    />
+          className="relative inline-block w-full px-4"
+          variants={itemVariants}
+        >
+          <motion.div
+            className={`
+              relative z-10 flex flex-col sm:flex-row items-center justify-center
+              gap-4 sm:gap-6
+              p-6
+              bg-white border border-gray-200
+              rounded-2xl shadow-2xl
+              max-w-xl mx-auto
+              transition-all duration-300
+              ${isArabic ? 'sm:flex-row-reverse text-right' : 'text-left'}
+            `}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+          >
+            {/* Logo */}
+            <motion.img
+              src={jehadHeader}
+              alt="Jehad Logo"
+              className="h-12 sm:h-16 md:h-20 w-auto object-contain"
+              animate={{ y: [0, -2, 0] }}
+              transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+            />
 
-    {/* Elegant Separator - Hidden on mobile */}
-    <div className="hidden sm:flex text-3xl text-blue-400 font-light select-none items-center leading-none">
-      |
-    </div>
+            {/* Elegant Separator - Hidden on mobile */}
+            <div className="hidden sm:flex text-3xl text-blue-400 font-light select-none items-center leading-none">
+              |
+            </div>
 
-    {/* Name & Subtitle */}
-    <div className="flex flex-col items-center justify-center text-center">
-      <h2 className="text-[clamp(1.25rem,4vw,2.5rem)] font-extrabold text-gray-900 leading-snug tracking-tight">
-        المدرب <span className="text-blue-500">جهاد شجاعية</span>
-      </h2>
-      <p className="text-[clamp(0.75rem,2vw,1.125rem)] text-gray-600 font-medium mt-1 tracking-wide">
-        Professional Training
-      </p>
-    </div>
-  </motion.div>
-</motion.div>
-
-
+            {/* Name & Subtitle */}
+            <div className="flex flex-col items-center justify-center text-center">
+              <h2 className="text-[clamp(1.25rem,4vw,2.5rem)] font-extrabold text-gray-900 leading-snug tracking-tight">
+                المدرب <span className="text-blue-500">جهاد شجاعية</span>
+              </h2>
+              <p className="text-[clamp(0.75rem,2vw,1.125rem)] text-gray-600 font-medium mt-1 tracking-wide">
+                Professional Training
+              </p>
+            </div>
+          </motion.div>
+        </motion.div>
 
         {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mt-6 md:mt-10 px-2 sm:px-0">
