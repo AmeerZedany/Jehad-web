@@ -1,199 +1,368 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { FaFacebookF, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+
+// Assets
 import logo from '../assets/logo.png';
+import signature from '../assets/signature.png';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
   const location = useLocation();
   const { t, i18n } = useTranslation();
 
-  const primaryBlue = '#2563eb'; // الأزرق المتqوسط من اللوجو
+  // Check if current language is Arabic
+  const isRTL = i18n.language === 'ar';
+  const langLabel = isRTL ? 'EN' : 'عربي';
 
-  useEffect(() => {
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
-  }, [i18n.language]);
+  // Colors for potential usage
+  const colors = useMemo(() => ({
+    primary: '#3b82f6',
+    secondary: '#60a5fa',
+    dark: '#0f172a',
+    light: '#f8fafc',
+    accent: '#f59e0b',
+  }), []);
 
-  useEffect(() => setIsOpen(false), [location.pathname]);
+  // Strings from translation
+  const translations = useMemo(() => ({
+    home: t('homeNAV'),
+    about: t('aboutNAV'),
+    services: t('servicesNAV'),
+    contact: t('contactNAV'),
+    album: t('albumNAV'),
+    aria: {
+      menu: t('aria.menu'),
+      close: t('aria.close'),
+      language: t('aria.language'),
+      social: (platform: string) => t('aria.social', { platform }),
+    },
+  }), [t]);
 
-  const navLinks = [
-    { name: t('homeNAV'), path: '/' },
-    { name: t('aboutNAV'), path: '/about' },
-    { name: t('servicesNAV'), path: '/services' },
-    { name: t('contactNAV'), path: '/contact' },
-    { name: t('albumNAV'), path: '/album' },
-   
-  ];
+  // Build navigation data
+  const navData = useMemo(() => ({
+    links: [
+      { name: translations.home, path: '/' },
+      { name: translations.about, path: '/about' },
+      { name: translations.services, path: '/services' },
+      { name: translations.contact, path: '/contact' },
+      { name: translations.album, path: '/album' },
+    ],
+    social: [
+      {
+        icon: <FaFacebookF />,
+        link: 'https://facebook.com/jihad.shojaeha',
+        label: translations.aria.social('Facebook'),
+      },
+      {
+        icon: <FaLinkedinIn />,
+        link: 'https://linkedin.com/in/jihad-shojaeha/',
+        label: translations.aria.social('LinkedIn'),
+      },
+      {
+        icon: <FaInstagram />,
+        link: 'https://instagram.com/jihad.shojaeha',
+        label: translations.aria.social('Instagram'),
+      },
+    ],
+  }), [translations]);
 
-  const toggleLanguage = () => {
-    const nextLang = i18n.language === 'ar' ? 'en' : 'ar';
+  // Toggle language logic
+  const toggleLanguage = useCallback(() => {
+    const nextLang = isRTL ? 'en' : 'ar';
     i18n.changeLanguage(nextLang);
+    localStorage.setItem('preferredLanguage', nextLang);
+  }, [isRTL, i18n]);
+
+  // Mobile menu open/close
+  const toggleMenu = useCallback(() => {
+    setIsOpen(prev => !prev);
+    document.body.style.overflow = isOpen ? '' : 'hidden';
+  }, [isOpen]);
+
+  const closeMenu = useCallback(() => {
+    setIsOpen(false);
+    document.body.style.overflow = '';
+  }, []);
+
+  // Scroll detection for styling changes
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Close menu on path change
+  useEffect(() => {
+    closeMenu();
+  }, [location.pathname, closeMenu]);
+
+  // Initialize direction & language
+  useEffect(() => {
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.documentElement.lang = i18n.language;
+
+    const storedLang = localStorage.getItem('preferredLanguage');
+    if (storedLang) i18n.changeLanguage(storedLang);
+  }, [isRTL, i18n]);
+
+  // Animated side menu
+  const sideMenuVariants = {
+    hidden: { x: '100%' },
+    visible: {
+      x: 0,
+      transition: { type: 'spring', stiffness: 320, damping: 28 },
+    },
+    exit: {
+      x: '100%',
+      transition: { duration: 0.3 },
+    },
   };
 
-  const langLabel = i18n.language === 'ar' ? 'EN' : 'عربي';
+  // Animated list items
+  const navItemVariants = {
+    hidden: { x: 30, opacity: 0 },
+    visible: (i: number) => ({
+      x: 0,
+      opacity: 1,
+      transition: { delay: i * 0.05, type: 'spring' },
+    }),
+    exit: { x: 30, opacity: 0 },
+  };
 
-  const socialIcons = [
-    { icon: <FaFacebookF />, link: 'https://www.facebook.com/jihad.shojaeha' },
-    { icon: <FaLinkedinIn />, link: 'https://www.linkedin.com/in/jihad-shojaeha/' },
-    { icon: <FaInstagram />, link: 'https://www.instagram.com/jihad.shojaeha/?hl=en' },
-  ];
+  // Smoothly scroll to top if clicking logo on homepage
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
-    
     <motion.nav
-      className="fixed top-0 w-full z-50 bg-black backdrop-blur-xl border-b border-white/10 shadow-xl"
-      initial={{ opacity: 0, y: -30 }}
+      className={`fixed top-0 w-full z-50 border-b border-gray-700 shadow-lg transition-all duration-300 ${
+        scrolled ? 'bg-gray-900/90 backdrop-blur-md py-2' : 'bg-gray-900/80 py-3'
+      }`}
+      initial={{ opacity: 0, y: -25 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
     >
-      <div className="container mx-auto flex justify-between items-center py-4 px-6 sm:px-8">
-        {/* Logo & Name */}
-        <Link to="/" className="flex items-center gap-3">
-          <motion.div
-            className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white shadow-md overflow-hidden"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.7 }}
+      {/* Main container */}
+      <div className="container mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Logo + Signature */}
+        <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+          <Link
+            to="/"
+            className="flex items-center gap-2 sm:gap-3 px-1 py-1 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+            onClick={handleLogoClick}
+            aria-label="Go to homepage"
           >
-            <img
-              src={logo}
-              alt="Jehad Logo"
-              className="w-full h-full object-cover scale-110"
-            />
-          </motion.div>
-
-          <motion.span
-  className="text-white text-[28px] sm:text-[34px] whitespace-nowrap"
-  style={{
-    fontFamily: '"Great Vibes", cursive',
-    fontWeight: 400,
-    textShadow: '0 1px 1px rgba(255,255,255,0.15)',
-    opacity: 0.9,
-    letterSpacing: '0.2px',
-  }}
-  initial={{ opacity: 0, x: -5 }}
-  animate={{ opacity: 1, x: 0 }}
-  transition={{ duration: 0.7, delay: 0.2 }}
->
-  Jehad Shojaeha
-</motion.span>
-
-
-
-        </Link>
-
-        {/* Desktop Nav */}
-        <ul className="hidden md:flex items-center gap-6 text-sm sm:text-base text-white font-medium">
-          {navLinks.map((link, idx) => (
-            <motion.li
-              key={idx}
-              className={`list-none relative group transition-all duration-300 ${
-                location.pathname === link.path ? `text-[${primaryBlue}]` : 'text-white'
-              }`}
-              whileHover={{ y: -2, scale: 1.06 }}
-              transition={{ type: 'spring', stiffness: 300 }}
+            <motion.div
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-blue-500/30 shadow-md overflow-hidden"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.7 }}
             >
-              <Link to={link.path} className="relative px-1">
-                <span className="relative z-10">{link.name}</span>
-                <span
-                  className="absolute left-0 bottom-0 w-full h-0.5 scale-x-0 group-hover:scale-x-100 transform origin-left transition-transform duration-500"
-                  style={{
-                    background: primaryBlue,
-                  }}
-                />
-              </Link>
-            </motion.li>
-          ))}
+              <img
+                src={logo}
+                alt="Jehad Logo"
+                className="w-full h-full object-cover scale-110"
+                loading="lazy"
+              />
+            </motion.div>
 
-          {/* Social Icons */}
-          <div className="flex items-center gap-4 ml-4">
-            {socialIcons.map(({ icon, link }, i) => (
-              <motion.a
-                key={i}
-                href={link}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ scale: 1.2 }}
-                transition={{ duration: 0.2 }}
-                className="text-white hover:text-blue-500 text-lg"
+            <motion.img
+              src={signature}
+              alt="Jehad Shojaeha Signature"
+              className="h-9 sm:h-12 max-w-[150px] object-contain drop-shadow-md motion-safe:animate-[float_3s_ease-in-out_infinite]"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+            />
+          </Link>
+        </motion.div>
+
+        {/* Desktop navigation */}
+        <div className="hidden md:flex items-center gap-6">
+          {/* Main Nav Links */}
+          <ul className="flex items-center gap-1">
+            {navData.links.map((link, idx) => (
+              <motion.li
+                key={idx}
+                className="relative list-none"
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 400 }}
               >
-                {icon}
-              </motion.a>
+                <Link
+                  to={link.path}
+                  className={`relative px-4 py-2 block text-sm lg:text-base font-medium transition-colors duration-200 ${
+                    location.pathname === link.path
+                      ? 'text-blue-400'
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                  aria-current={location.pathname === link.path ? 'page' : undefined}
+                >
+                  <span className="relative inline-block">
+                    {link.name}
+                    {location.pathname === link.path && (
+                      <motion.span
+                        layoutId="activeLink"
+                        className="absolute left-0 bottom-0 h-0.5 bg-blue-400 rounded-full"
+                        initial={{ width: 0 }}
+                        animate={{ width: '100%' }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 500,
+                          damping: 30,
+                          mass: 0.6,
+                        }}
+                      />
+                    )}
+                  </span>
+                </Link>
+              </motion.li>
             ))}
-          </div>
+          </ul>
 
-          {/* Language Switcher without flags */}
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={toggleLanguage}
-            className="text-xs sm:text-sm border border-white px-3 py-1 rounded-full hover:bg-white hover:text-black transition shadow-sm"
+          {/* Social Icons + Language */}
+          <div
+            className={`flex items-center gap-4 ${
+              isRTL ? 'mr-4 pr-4 border-r' : 'ml-4 pl-4 border-l'
+            } border-gray-700`}
           >
-            <span className="font-semibold">{langLabel}</span>
-          </motion.button>
-        </ul>
+            {/* Social Icons */}
+            <div className="flex items-center gap-3">
+              {navData.social.map(({ icon, link, label }, i) => (
+                <motion.a
+                  key={i}
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  whileHover={{ scale: 1.1, color: colors.secondary }}
+                  whileTap={{ scale: 0.9 }}
+                  className="text-gray-400 hover:text-blue-300 text-lg transition-colors p-1.5"
+                >
+                  {icon}
+                </motion.a>
+              ))}
+            </div>
 
-        {/* Mobile Toggle Button */}
-        <button
-          className="md:hidden text-white"
-          onClick={() => setIsOpen(!isOpen)}
+            {/* Language Button */}
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={toggleLanguage}
+              aria-label={translations.aria.language}
+              className="text-xs sm:text-sm border border-gray-400 px-3 py-1.5 rounded-full font-medium shadow-sm bg-white text-black hover:bg-gray-100 transition-all"
+            >
+              {langLabel}
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <motion.button
+          className="md:hidden text-white p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-blue-500"
+          onClick={toggleMenu}
+          whileTap={{ scale: 0.9 }}
+          aria-label={isOpen ? translations.aria.close : translations.aria.menu}
+          aria-expanded={isOpen}
         >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+          {isOpen ? (
+            <X size={26} className="text-blue-400" />
+          ) : (
+            <Menu size={26} />
+          )}
+        </motion.button>
       </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            className="fixed top-0 right-0 w-3/4 h-full bg-black/90 backdrop-blur-md z-50 flex flex-col items-center text-center px-6 pt-24 space-y-6 md:hidden"
-            initial={{ x: '100%' }}
-            animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', stiffness: 220, damping: 30 }}
-          >
-            {navLinks.map((link, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.1 * index }}
-              >
-                <Link
-                  to={link.path}
-                  className={`text-white text-lg sm:text-xl font-medium hover:text-[${primaryBlue}] transition-all block ${
-                    location.pathname === link.path ? `text-[${primaryBlue}]` : ''
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              </motion.div>
-            ))}
+          <>
+            {/* Dark overlay behind the menu */}
+            <motion.div
+              className="fixed inset-0 z-40 bg-black/60 md:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={closeMenu}
+            />
 
-            <div className="flex gap-5 pt-4">
-              {socialIcons.map(({ icon, link }, i) => (
-                <a
-                  key={i}
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-white hover:text-blue-500 text-xl transition"
-                >
-                  {icon}
-                </a>
-              ))}
-            </div>
-
-            <motion.button
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleLanguage}
-              className="text-sm border border-white px-4 py-1 rounded-full text-white mt-6 hover:bg-white hover:text-black transition"
+            {/* Off-Canvas Drawer */}
+            <motion.div
+              className="fixed top-0 right-0 z-50 h-screen w-2/3 max-w-xs bg-gray-900/95 backdrop-blur-lg border-l border-gray-700 shadow-2xl md:hidden flex flex-col pt-24 px-6 pb-8"
+              variants={sideMenuVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
             >
-              <span className="font-semibold">{langLabel}</span>
-            </motion.button>
-          </motion.div>
+              <ul className="flex flex-col gap-1">
+                {navData.links.map((link, i) => (
+                  <motion.li
+                    key={i}
+                    variants={navItemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    custom={i}
+                  >
+                    <Link
+                      to={link.path}
+                      className={`block px-4 py-3 rounded-lg text-lg font-medium transition-colors ${
+                        location.pathname === link.path
+                          ? 'bg-blue-900/40 text-blue-400'
+                          : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                      }`}
+                      onClick={closeMenu}
+                      aria-current={location.pathname === link.path ? 'page' : undefined}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.li>
+                ))}
+              </ul>
+
+              {/* Social + Language at bottom */}
+              <div className="mt-auto pt-8 border-t border-gray-700">
+                <div className="flex flex-col gap-6 pt-6">
+                  <div className="flex justify-center gap-6">
+                    {navData.social.map(({ icon, link, label }, i) => (
+                      <motion.a
+                        key={i}
+                        href={link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={label}
+                        whileHover={{ scale: 1.1, color: colors.secondary }}
+                        whileTap={{ scale: 0.9 }}
+                        className="text-gray-400 hover:text-blue-300 text-2xl p-2"
+                      >
+                        {icon}
+                      </motion.a>
+                    ))}
+                  </div>
+
+                  <motion.button
+                    onClick={() => {
+                      toggleLanguage();
+                      closeMenu();
+                    }}
+                    className="w-full border border-gray-400 px-4 py-2.5 rounded-full text-sm font-medium bg-white text-black hover:bg-gray-100 transition-colors"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {langLabel}
+                  </motion.button>
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </motion.nav>

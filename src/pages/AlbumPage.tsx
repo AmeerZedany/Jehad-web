@@ -1,278 +1,402 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
-import { X } from 'lucide-react';
 
-const endpoint =
-  'https://opensheet.elk.sh/17nDf92K92d1y0ikBY_hUMjQ-ow7Z24QArToW6SFoW64/Sheet1';
+// Animation configurations
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+};
+
+const backdropFade = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+  exit: { opacity: 0 }
+};
 
 interface Image {
   name: string;
   url: string;
 }
 
-function getThumbnail(url: string) {
-  return url.includes('&sz=') ? url : `${url}&sz=w500`;
-}
-
-function stripExtension(filename: string) {
-  return filename.replace(/\.[^/.]+$/, '');
-}
-
-const AlbumPage = () => {
-  const [images, setImages] = useState<Image[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
-  const [showScrollTop, setShowScrollTop] = useState(false);
+const AlbumPage = ({ headerHeight = 0 }: { headerHeight?: number }) => {
   const { t } = useTranslation();
+  const [state, setState] = useState<{
+    images: Image[];
+    loading: boolean;
+    error: string | null;
+    selectedImage: Image | null;
+    showScrollTop: boolean;
+  }>({
+    images: [],
+    loading: true,
+    error: null,
+    selectedImage: null,
+    showScrollTop: false
+  });
+
+  const endpoint = 'https://opensheet.elk.sh/17nDf92K92d1y0ikBY_hUMjQ-ow7Z24QArToW6SFoW64/Sheet1';
+
+  // Memoized utility functions
+  const getThumbnail = useCallback((url: string) => {
+    if (!url) return '';
+    return url.includes('=w') ? url : `${url}=w500`;
+  }, []);
+
+  const stripExtension = useCallback((filename: string) => {
+    return filename.replace(/\.[^/.]+$/, '');
+  }, []);
+
+  // Fetch images with proper error handling
+  const fetchImages = useCallback(async () => {
+    setState(prev => ({ ...prev, loading: true, error: null }));
+
+    try {
+      const response = await axios.get<Array<{ Name: string; 'Image URL': string }>>(endpoint);
+      const validImages = response.data
+        .filter(row => row['Image URL']?.trim() && row.Name?.trim())
+        .map(row => ({
+          name: row.Name.trim(),
+          url: row['Image URL'].trim()
+        }));
+
+      if (validImages.length === 0) {
+        setState(prev => ({
+          ...prev,
+          error: t('gallery.noImages') || 'No images available',
+          loading: false
+        }));
+      } else {
+        setState(prev => ({
+          ...prev,
+          images: validImages,
+          loading: false
+        }));
+      }
+    } catch (err) {
+      console.error('Image loading error:', err);
+      setState(prev => ({
+        ...prev,
+        error: t('gallery.loadError') || 'Failed to load images',
+        loading: false
+      }));
+    }
+  }, [t]);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      setLoading(true);
-  
-      try {
-        const response = await axios.get<Array<{ Name: string; 'Image URL': string }>>(endpoint);
-        const data = response.data;
-  
-        const mapped: Image[] = data.map((row) => ({
-          name: row.Name,
-          url: row['Image URL'],
-        }));
-  
-        setImages(mapped);
-      } catch (err) {
-        console.error('❌ خطأ في تحميل الصور من Google Sheet:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    // Clear the cache explicitly (in case it was previously stored)
-    localStorage.removeItem('cached_album_images');
-    localStorage.removeItem('cached_album_images_expiry');
-  
     fetchImages();
-  }, []);
-  
+  }, [fetchImages]);
 
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      setSelectedImage(null);
+  // Current image index for navigation
+  const currentIndex = useMemo(() => {
+    if (!state.selectedImage) return -1;
+    return state.images.findIndex(img => img.url === state.selectedImage?.url);
+  }, [state.selectedImage, state.images]);
+
+  // Image navigation functions
+  const showPrevImage = useCallback(() => {
+    if (currentIndex > 0) {
+      setState(prev => ({
+        ...prev,
+        selectedImage: state.images[currentIndex - 1]
+      }));
     }
+  }, [currentIndex, state.images]);
+
+  const showNextImage = useCallback(() => {
+    if (currentIndex < state.images.length - 1) {
+      setState(prev => ({
+        ...prev,
+        selectedImage: state.images[currentIndex + 1]
+      }));
+    }
+  }, [currentIndex, state.images]);
+
+  // Keyboard navigation for lightbox
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (!state.selectedImage) return;
+
+    switch (e.key) {
+      case 'Escape':
+        setState(prev => ({ ...prev, selectedImage: null }));
+        break;
+      case 'ArrowLeft':
+        showPrevImage();
+        break;
+      case 'ArrowRight':
+        showNextImage();
+        break;
+    }
+  }, [state.selectedImage, showPrevImage, showNextImage]);
+
+  // Scroll to top button visibility
+  const handleScroll = useCallback(() => {
+    setState(prev => ({
+      ...prev,
+      showScrollTop: window.scrollY > 400
+    }));
   }, []);
 
+  // Event listeners setup/cleanup
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleKeyDown]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 400);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('scroll', handleScroll);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [handleKeyDown, handleScroll]);
 
-  const scrollToTop = () => {
+  const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const currentIndex = selectedImage ? images.findIndex((img) => img.url === selectedImage.url) : -1;
-
-  const showPrevImage = () => {
-    if (currentIndex > 0) {
-      setSelectedImage(images[currentIndex - 1]);
-    }
-  };
-
-  const showNextImage = () => {
-    if (currentIndex < images.length - 1) {
-      setSelectedImage(images[currentIndex + 1]);
-    }
-  };
+  }, []);
 
   return (
     <motion.div
-      className="bg-gradient-to-br from-white via-gray-50 to-blue-50 px-4 sm:px-6 lg:px-20 py-20 sm:py-24 min-h-screen text-center"
+      className="relative min-h-screen bg-gradient-to-b from-gray-900 to-gray-950 text-white px-4 sm:px-6 lg:px-8"
+      style={{ paddingTop: `${headerHeight + 24}px` }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.7 }}
+      transition={{ duration: 0.5 }}
     >
-     <motion.h1
-      className="text-2xl sm:text-4xl font-extrabold text-blue-700 mb-3 tracking-tight drop-shadow-sm"
-      initial={{ y: -30, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8 }}
-    >
-      {t('gallery.title')}
-    </motion.h1>
+      {/* Background effects */}
+      <motion.div
+        className="absolute top-16 left-8 w-64 h-64 bg-blue-400/5 rounded-full blur-3xl"
+        animate={{ y: [0, -20, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute bottom-16 right-8 w-64 h-64 bg-blue-600/5 rounded-full blur-3xl"
+        animate={{ y: [0, 20, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] pointer-events-none"
+        initial="hidden"
+        animate="visible"
+        variants={fadeInUp}
+      />
 
-    <motion.p
-      className="text-lg sm:text-xl text-gray-600 mb-10 sm:mb-12 max-w-md sm:max-w-2xl mx-auto"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.5, duration: 1 }}
-    >
-      {t('gallery.description')}
-    </motion.p>
+      {/* Header section */}
+<div className="max-w-5xl mx-auto text-center px-4 sm:px-6 pt-12 sm:pt-20 pb-6 sm:pb-8">
+  <motion.h1
+    className="text-[clamp(1.5rem,5vw,2.5rem)] font-bold leading-tight tracking-normal text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500"
+    initial={{ y: -15, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    transition={{ 
+      duration: 0.6, 
+      ease: [0.16, 1, 0.3, 1] 
+    }}
+  >
+    {t('gallery.title')}
+  </motion.h1>
+
+  <motion.p
+    className="mt-3 sm:mt-4 text-[clamp(0.875rem,3.5vw,1.125rem)] text-gray-300/90 leading-relaxed max-w-2xl mx-auto"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ 
+      delay: 0.3, 
+      duration: 0.8, 
+      ease: [0.16, 1, 0.3, 1] 
+    }}
+  >
+    {t('gallery.description')}
+  </motion.p>
+</div>
 
 
-      {loading ? (
-        <div className="flex justify-center items-center py-20">
+      {/* Content section */}
+      <div className="max-w-7xl mx-auto pb-12 sm:pb-16">
+        {state.loading ? (
+          <div className="flex justify-center items-center py-20">
+            <motion.div
+              className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+            />
+          </div>
+        ) : state.error ? (
           <motion.div
-            className="w-12 h-12 border-[5px] border-blue-600 border-t-transparent rounded-full animate-spin"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-          />
-        </div>
-      ) : images.length === 0 ? (
-        <motion.p
-          className="text-red-500 text-base sm:text-lg"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          😢 لا توجد صور متاحة حالياً.
-        </motion.p>
-      ) : (
-        <motion.div
-          className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4 lg:gap-8"
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: { opacity: 0 },
-            visible: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.06,
+            className="text-center py-12"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            <p className="text-red-400 text-sm sm:text-base">{state.error}</p>
+          </motion.div>
+        ) : (
+          <motion.div
+            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.05,
+                },
               },
-            },
-          }}
-        >
-          {images.map((img, idx) => {
-            const thumb = getThumbnail(img.url);
-
-            return (
+            }}
+          >
+            {state.images.map((img) => (
               <motion.div
-                key={idx}
-                className="relative group rounded-xl overflow-hidden shadow-xl cursor-pointer bg-white transition duration-700 ease-in-out hover:shadow-[0_8px_30px_rgba(0,118,255,0.35)]"
-                variants={{
-                  hidden: { opacity: 0, scale: 0.95 },
-                  visible: { opacity: 1, scale: 1 },
-                }}
-                whileHover={{ scale: 1.05 }}
-                onClick={() => setSelectedImage(img)}
+                key={img.url}
+                className="relative group rounded-lg overflow-hidden cursor-pointer bg-white/5 backdrop-blur-sm border border-white/10"
+                variants={scaleIn}
+                whileHover={{ scale: 1.02 }}
+                onClick={() => setState(prev => ({ ...prev, selectedImage: img }))}
               >
-                <motion.img
-                  src={thumb}
-                  alt={img.name}
-                  className="w-full h-44 sm:h-52 lg:h-60 object-cover transition-transform duration-700 ease-in-out"
-                  loading="lazy"
-                  onError={(e) => {
-                    console.error(`❌ فشل تحميل الصورة: ${img.name}`, thumb);
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
+                <div className="aspect-square overflow-hidden">
+                  <motion.img
+                    src={getThumbnail(img.url)}
+                    alt={stripExtension(img.name)}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      console.error(`Failed to load image: ${img.name}`);
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
+                  />
+                </div>
 
-                <div className="absolute bottom-0 left-0 right-0 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/60 backdrop-blur-xl text-black font-semibold text-xs sm:text-sm opacity-0 group-hover:opacity-100 transition duration-500 ease-in-out">
-                  {stripExtension(img.name)}
+                {/* Enhanced hover text */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3">
+                  <p className="text-white text-sm font-medium line-clamp-2 px-2 py-1 bg-black/40 rounded backdrop-blur-sm">
+                    {stripExtension(img.name)}
+                  </p>
                 </div>
               </motion.div>
-            );
-          })}
-        </motion.div>
-      )}
-
-<AnimatePresence>
-  {selectedImage && (
-    <motion.div
-      className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={() => setSelectedImage(null)}
-    >
-      <motion.div
-        className="bg-white rounded-2xl overflow-hidden max-w-full sm:max-w-5xl w-full relative border border-blue-200 shadow-[0_0_100px_rgba(0,0,0,0.5)]"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.8 }}
-        transition={{ duration: 0.5 }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <motion.img
-          key={selectedImage.url}
-          src={selectedImage.url}
-          alt={selectedImage.name}
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.6 }}
-          className="w-full h-auto object-contain max-h-[80vh] sm:max-h-[90vh]"
-        />
-
-        {/* النص تحت الصورة */}
-        <motion.div
-          className="absolute bottom-0 left-0 right-0 bg-black/70 text-white px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-lg font-semibold backdrop-blur-md shadow-inner"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.5 }}
-        >
-          {stripExtension(selectedImage.name)}
-        </motion.div>
-
-        {/* زر الإغلاق الجديد */}
-<button
-  onClick={() => setSelectedImage(null)}
-  className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-white/60 hover:bg-white/80 text-blue-700 p-3 rounded-full shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-110"
-  aria-label="إغلاق الصورة"
->
-  <X className="w-5 h-5" />
-</button>
-
-
-       {/* زر السهم لليمين (السابق) */}
-        {currentIndex > 0 && (
-          <button
-            onClick={showPrevImage}
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/60 hover:bg-white/80 text-blue-700 p-3 rounded-full shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-110"
-            aria-label="الصورة السابقة"
-          >
-            <ArrowLeft className="w-6 h-6" />
-          </button>
+            ))}
+          </motion.div>
         )}
+      </div>
 
-        {/* زر السهم لليسار (التالي) */}
-        {currentIndex < images.length - 1 && (
-          <button
-            onClick={showNextImage}
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/60 hover:bg-white/80 text-blue-700 p-3 rounded-full shadow-xl backdrop-blur-md transition-all duration-300 hover:scale-110"
-            aria-label="الصورة التالية"
+      {/* Lightbox */}
+      <AnimatePresence>
+        {state.selectedImage && (
+          <motion.div
+            className="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={backdropFade}
+            onClick={() => setState(prev => ({ ...prev, selectedImage: null }))}
           >
-            <ArrowRight className="w-6 h-6" />
-          </button>
+            <motion.div
+              className="relative w-full max-w-6xl max-h-[90vh] bg-gray-900 rounded-xl overflow-hidden shadow-2xl border border-white/10"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Image container with perfect fitting */}
+              <div className="flex items-center justify-center h-[80vh] p-4">
+                <motion.img
+                  key={state.selectedImage.url}
+                  src={state.selectedImage.url}
+                  alt={stripExtension(state.selectedImage.name)}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="max-w-full max-h-full object-contain"
+                  loading="eager"
+                />
+              </div>
+
+              {/* Enhanced caption */}
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-6 py-3"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-white font-medium text-sm sm:text-base text-center px-4 py-2 bg-black/30 rounded-full backdrop-blur-sm inline-block">
+                  {stripExtension(state.selectedImage.name)}
+                </p>
+              </motion.div>
+
+              {/* Close button */}
+              <button
+                onClick={() => setState(prev => ({ ...prev, selectedImage: null }))}
+                className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-sm transition-all duration-200 hover:scale-110"
+                aria-label={t('gallery.close') || 'Close'}
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* Navigation buttons */}
+              {currentIndex > 0 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    showPrevImage();
+                  }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-200 hover:scale-110"
+                  aria-label={t('gallery.previous') || 'Previous'}
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+              )}
+
+              {currentIndex < state.images.length - 1 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    showNextImage();
+                  }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-sm transition-all duration-200 hover:scale-110"
+                  aria-label={t('gallery.next') || 'Next'}
+                >
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              )}
+            </motion.div>
+          </motion.div>
         )}
+      </AnimatePresence>
 
-
-      </motion.div>
-    </motion.div>
-  )}
-</AnimatePresence>
-
-
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-5 right-5 z-50 p-3 rounded-full bg-blue-600 text-white shadow-2xl hover:bg-blue-700 hover:scale-105 transition-all duration-300"
-          aria-label="العودة للأعلى"
-        >
-          <ArrowUp className="w-5 h-5" />
-        </button>
-      )}
+      {/* Scroll to top button */}
+      <AnimatePresence>
+        {state.showScrollTop && (
+          <motion.button
+            onClick={scrollToTop}
+            className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-blue-500/90 text-white shadow-lg hover:bg-blue-500 transition-all duration-300 backdrop-blur-sm"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            aria-label={t('gallery.scrollTop') || 'Scroll to top'}
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

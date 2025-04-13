@@ -50,111 +50,109 @@ const HeaderSection1 = () => {
       </div>
 
       {/* Main Content */}
-      <div className={`relative z-10 w-full max-w-6xl flex flex-col justify-center gap-6 ${isArabic ? 'text-right' : 'text-left'}`}>
+      <div className={`relative z-10 w-full max-w-6xl mx-4 flex flex-col justify-center gap-4 md:gap-6 ${isArabic ? 'text-right' : 'text-left'}`}>
+        <motion.h1
+          className={`text-[clamp(2rem,6vw,4rem)] font-extrabold text-white drop-shadow-xl leading-tight tracking-tight ${
+            isArabic ? 'text-right' : 'text-left'
+          }`}
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+        >
+          {t('headerSection1.mainTitle')}
+        </motion.h1>
 
-      <motion.h1
-        className={`text-4xl sm:text-5xl font-extrabold text-white drop-shadow-xl leading-tight ${
-          isArabic ? 'text-right' : 'text-left'
-        }`}
-        initial="hidden"
-        animate="visible"
-        variants={fadeInUp}
-      >
-        {t('headerSection1.mainTitle')}
-      </motion.h1>
+        <motion.h2
+          className={`text-[clamp(1.25rem,4vw,2.5rem)] text-[#3182ce] font-semibold drop-shadow-md tracking-wide ${
+            isArabic ? 'text-right' : 'text-left'
+          }`}
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          custom={0.3}
+        >
+          <Typewriter
+            words={[t('headerSection1.subtitle')]}
+            loop={false}
+            typeSpeed={60}
+            deleteSpeed={40}
+            delaySpeed={1800}
+            cursor
+            cursorStyle="|"
+          />
+        </motion.h2>
 
-      <motion.h2
-        className={`text-xl sm:text-2xl md:text-3xl text-[#3182ce] font-semibold drop-shadow-md ${
-          isArabic ? 'text-right' : 'text-left'
-        }`}
-        initial="hidden"
-        animate="visible"
-        variants={fadeInUp}
-        custom={0.3}
-      >
-        <Typewriter
-          words={[t('headerSection1.subtitle')]}
-          loop={false}
-          typeSpeed={60}
-          deleteSpeed={40}
-          delaySpeed={1800}
-          cursor
-          cursorStyle="|"
-        />
-      </motion.h2>
-
-      <motion.p
-        className={`text-lg sm:text-xl md:text-2xl text-white/90 max-w-3xl mt-2 leading-relaxed ${
-          isArabic ? 'text-right' : 'text-left'
-        }`}
-        initial="hidden"
-        animate="visible"
-        variants={fadeInUp}
-        custom={0.4}
-      >
-        {t('headerSection1.descriptionPart1')}{' '}
-        <span className="text-[#3182ce] font-bold">
-          {t('headerSection1.descriptionHighlight')}
-        </span>{' '}
-        {t('headerSection1.descriptionPart2')}
-      </motion.p>
-
+        <motion.p
+          className={`text-[clamp(0.9rem,3vw,1.5rem)] text-white/90 max-w-3xl mt-1 md:mt-2 leading-relaxed tracking-wide ${
+            isArabic ? 'text-right' : 'text-left'
+          }`}
+          initial="hidden"
+          animate="visible"
+          variants={fadeInUp}
+          custom={0.4}
+        >
+          {t('headerSection1.descriptionPart1')}{' '}
+          <span className="text-[#3182ce] font-bold">
+            {t('headerSection1.descriptionHighlight')}
+          </span>{' '}
+          {t('headerSection1.descriptionPart2')}
+        </motion.p>
 
         {/* CTA Buttons */}
-        <motion.div
-          className="flex flex-wrap justify-center gap-3 sm:gap-4 mt-8"
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          custom={0.6}
-        >
-          <HeaderButton to="/services" variant="blue">
-            {t('headerSection1.btnServices')}
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </HeaderButton>
-          <HeaderButton href="https://go.jihad-shojaeha.com/free-ebook" variant="white" external>
-            {t('headerSection1.btnEbook')}
-          </HeaderButton>
-          <HeaderButton href="https://wa.me/972599358641" variant="whatsapp" external icon={<FaWhatsapp />}>
-            {t('headerSection1.btnWhatsapp')}
-          </HeaderButton>
-          <HeaderButton href="https://t.me/jihadshojaeha" variant="telegram" external icon={<FaTelegramPlane />}>
-            {t('headerSection1.btnTelegram')}
-          </HeaderButton>
-        </motion.div>
-
-       
+       {/* CTA Buttons */}
+<motion.div
+  className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mt-4 sm:mt-6 md:mt-8 w-full"  // Changed justify-start to justify-center and added w-full
+  initial="hidden"
+  animate="visible"
+  variants={fadeInUp}
+  custom={0.6}
+>
+  <HeaderButton to="/services" variant="blue">
+    {t('headerSection1.btnServices')}
+    <ArrowRight className="w-4 h-4 ml-2" />
+  </HeaderButton>
+  <HeaderButton href="https://go.jihad-shojaeha.com/free-ebook" variant="white" external>
+    {t('headerSection1.btnEbook')}
+  </HeaderButton>
+  <HeaderButton href="https://wa.me/972599358641" variant="whatsapp" external icon={<FaWhatsapp />}>
+    {t('headerSection1.btnWhatsapp')}
+  </HeaderButton>
+  <HeaderButton href="https://t.me/jihadshojaeha" variant="telegram" external icon={<FaTelegramPlane />}>
+    {t('headerSection1.btnTelegram')}
+  </HeaderButton>
+</motion.div>
       </div>
-       {/* Numbers Section - Moved down */}
-       <motion.div
-          className="mt-16 w-full max-w-5xl bg-black/80 backdrop-blur-xl border border-white/10 rounded-xl py-6 px-4 sm:px-6 shadow-2xl"
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          custom={0.8}
-        >
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-center">
-            {stats.map((stat, index) => (
-              <div key={index} className="flex flex-col items-center space-y-1">
-                <div className="text-xl sm:text-2xl text-[#3182ce] drop-shadow-sm">{stat.icon}</div>
-                <div className="text-2xl font-bold text-[#3182ce]">
-                  <AnimatedNumber value={stat.number} suffix={stat.suffix} resetKey={i18n.language} />
-                </div>
-                <p className="text-sm text-white/80">{stat.label}</p>
+
+      {/* Numbers Section */}
+      <motion.div
+        className="mt-8 sm:mt-12 md:mt-16 w-full max-w-5xl mx-4 bg-black/80 backdrop-blur-xl border border-white/10 rounded-xl py-4 sm:py-6 px-3 sm:px-6 shadow-2xl"
+        initial="hidden"
+        animate="visible"
+        variants={fadeInUp}
+        custom={0.8}
+      >
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 sm:gap-3 md:gap-4 text-center">
+          {stats.map((stat, index) => (
+            <div key={index} className="flex flex-col items-center space-y-1">
+              <div className="text-lg sm:text-xl md:text-2xl text-[#3182ce] drop-shadow-sm">{stat.icon}</div>
+              <div className="text-xl sm:text-2xl font-bold text-[#3182ce]">
+                <AnimatedNumber value={stat.number} suffix={stat.suffix} resetKey={i18n.language} />
               </div>
-            ))}
-          </div>
-        </motion.div>
+              <p className="text-xs sm:text-sm text-white/80">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+      </motion.div>
 
       {/* Scroll Down */}
       <motion.button
-        className="absolute bottom-6 text-white/80"
+        className="absolute bottom-4 sm:bottom-6 text-white/80"
         onClick={handleScrollDown}
         whileHover={{ scale: 1.1 }}
         transition={{ duration: 0.3 }}
         aria-label="Scroll to next section"
       >
-        <ArrowRight className="rotate-90 w-6 h-6" />
+        <ArrowRight className="rotate-90 w-5 h-5 sm:w-6 sm:h-6" />
       </motion.button>
     </header>
   );
@@ -182,6 +180,7 @@ const AnimatedNumber = ({ value, duration = 2000, suffix = '', resetKey }: any) 
 
   return <>{display}{suffix}</>;
 };
+
 const HeaderButton = memo(({ href, to, children, variant, external, icon }: any) => {
   const styles: any = {
     blue: 'bg-[#63b3ed] text-white hover:bg-[#4299e1]',
@@ -190,13 +189,12 @@ const HeaderButton = memo(({ href, to, children, variant, external, icon }: any)
     telegram: 'bg-blue-500 text-white hover:bg-blue-600',
   };
 
-  const commonClasses = `px-5 py-3 rounded-full font-semibold flex items-center transition-all duration-300 ${styles[variant]}`;
+  const commonClasses = `px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 rounded-full font-medium sm:font-semibold flex items-center transition-all duration-300 text-sm sm:text-base ${styles[variant]}`;
 
   if (to) {
-    // React Router Link
     return (
       <Link to={to} className={commonClasses}>
-        {icon && <span className="mr-2">{icon}</span>}
+        {icon && <span className="mr-1 sm:mr-2">{icon}</span>}
         {children}
       </Link>
     );
@@ -209,7 +207,7 @@ const HeaderButton = memo(({ href, to, children, variant, external, icon }: any)
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
     >
-      {icon && <span className="mr-2">{icon}</span>}
+      {icon && <span className="mr-1 sm:mr-2">{icon}</span>}
       {children}
     </a>
   );

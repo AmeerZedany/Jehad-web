@@ -64,25 +64,25 @@
         {
           "title": "Training of Trainers (TOT)",
           "content": [
-            "🔸 American Board certified course available via Zoom or recorded sessions.",
-            "🔸 Professional introduction to training from needs analysis to practical projects.",
-            "🔸 Includes creative facilitation, e-training, and international certification with practical application."
+            "American Board certified course available via Zoom or recorded sessions.",
+            "Professional introduction to training from needs analysis to practical projects.",
+            "Includes creative facilitation, e-training, and international certification with practical application."
           ]
         },
         {
           "title": "Individual Consulting & Guidance",
           "content": [
-            "🔸 8-stage individual program over 4 months guiding trainers step by step.",
-            "🔸 Covers field selection, personal branding, identity building, and networking.",
-            "🔸 Professional technical and financial proposal preparation for training contracts."
+            "8-stage individual program over 4 months guiding trainers step by step.",
+            "Covers field selection, personal branding, identity building, and networking.",
+            "Professional technical and financial proposal preparation for training contracts."
           ]
         },
         {
           "title": "Corporate Training Programs",
           "content": [
-            "🔸 Tailored programs for team development including 21st century skills.",
-            "🔸 Skills like critical thinking, leadership, collaboration, emotional intelligence, and career planning.",
-            "🔸 In-house trainer development for managing interactive and impactful sessions."
+            "Tailored programs for team development including 21st century skills.",
+            "Skills like critical thinking, leadership, collaboration, emotional intelligence, and career planning.",
+            "In-house trainer development for managing interactive and impactful sessions."
           ]
         }
       ]
@@ -209,6 +209,7 @@
       "form": {
         "fullName": "Full Name",
         "email": "Email Address",
+        "subject": "Subject",
         "message": "Write your message here...",
         "button": "Send Message",
         "success": "✅ Your message has been sent successfully.",
@@ -221,6 +222,76 @@
       },
       "noText": "No images available."
     }
-  }
-
-  
+    ,
+      "termsPage": {
+        "title": "Terms & Privacy Policy",
+        "description": "We appreciate your trust. Please read the following terms and policies carefully to understand how you can use our website and services.",
+        "lastUpdated": "This page was last updated on: {{date}}.",
+        "sections": [
+          {
+            "title": "Terms of Use",
+            "content": [
+              "Please read these terms carefully before using this website.",
+              "By accessing or using the site, you agree to be fully bound by these terms.",
+              "If you do not agree to any of these terms, please stop using the site immediately."
+            ]
+          },
+          {
+            "title": "Privacy Policy",
+            "content": [
+              "We respect your privacy. No personal information is collected without your explicit consent.",
+              "Browsing the website does not require personal data entry unless subscribing to specific services."
+            ]
+          },
+          {
+            "title": "Intellectual Property",
+            "content": [
+              "All content (texts, images, designs, logos, videos, etc.) is owned by Coach Jehad Shojaeha and his team.",
+              "Reusing, modifying, or distributing any content without official written permission is prohibited."
+            ]
+          },
+          {
+            "title": "Legal Use of the Website",
+            "content": [
+              "It is prohibited to use the site for any illegal purposes or to infringe rights or spread harmful content."
+            ],
+            "list": [
+              "Illegal or copyright-infringing content.",
+              "Incitement to violence, hatred, or discrimination.",
+              "Unauthorized advertising or malware distribution."
+            ]
+          },
+          {
+            "title": "Trademarks",
+            "content": [
+              "All marks and logos associated with the site are exclusive trademarks.",
+              "Any use without permission is a legal violation."
+            ]
+          },
+          {
+            "title": "Use of Free and Paid Products",
+            "content": [
+              "Products available on the site (courses, files, etc.) are for personal use only."
+            ],
+            "list": [
+              "Selling, republishing, or modifying is prohibited.",
+              "Commercial use without written approval is not allowed."
+            ]
+          },
+          {
+            "title": "No Warranties",
+            "content": [
+              "The website and services are provided as-is without any express or implied warranties.",
+              "We do not guarantee accuracy, continuity, or error-free performance."
+            ]
+          },
+          {
+            "title": "Limitation of Liability",
+            "content": [
+              "The website is not responsible for any direct or indirect damages resulting from your use or inability to use it."
+            ]
+          }
+        ]
+      }
+    }
+    
