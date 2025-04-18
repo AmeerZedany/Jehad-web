@@ -10,8 +10,8 @@
       "stats": {
         "trainingHours": "More than 15,000 training hours",
         "trainees": "More than 10,000 trainees",
-        "partnerships": "Partnerships with organizations like EFE, GIZ, JICA, World Bank",
-        "awards": "Recipient of local and international awards for his contributions"
+        "partnerships": "Partnerships with 50 local and international organizations",
+        "awards": "Recipient of 5 local and international awards"
       },
       "collaborations": "Jihad has collaborated with prestigious global institutions such as: Education For Employment (EFE), JICA, GIZ, World Bank, and Swedish Development Agency, in addition to prominent local community institutions",
       "recentFocus": "In recent years, he has focused on supporting ambitious trainers through effective strategies to secure contracts with local and international institutions and master the paid training market",
@@ -98,11 +98,10 @@
         "descriptionHighlight": "real source of income",
         "descriptionPart2": "through paid training and consulting services",
         
-        "btnServices": "Explore Our Services",
-        "btnEbook": "Free eBook",
-        "btnWhatsapp": "Contact via WhatsApp",
-        "btnTelegram": "Contact Me",
-        "btnConsult": "Book a Consultation",
+        "btnServices":  "Our Services",
+        "btnEbook":     "Our Free eBook",
+        "btnWhatsapp":  "Chat on WhatsApp",
+        "btnTelegram":  "Connect on Telegram",
     
         "stats": [
           {

@@ -90,14 +90,15 @@ const Services = () => {
                 {item.title}
               </h2>
             </div>
-            <ul className="space-y-3 text-gray-300/90 text-sm sm:text-base leading-relaxed">
-              {item.content.map((point: string, i: number) => (
-                <li key={i} className="flex items-start gap-2">
-                  <span className="text-blue-400/80">•</span>
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
+            <ul className="space-y-3 text-gray-300/90 text-sm sm:text-base leading-relaxed text-justify">
+  {item.content.map((point: string, i: number) => (
+    <li key={i} className="flex items-start gap-2">
+      <span className="text-blue-400/80 mt-1">•</span>
+      <span className="text-justify">{point}</span>
+    </li>
+  ))}
+</ul>
+
           </motion.div>
         ))}
       </motion.div>

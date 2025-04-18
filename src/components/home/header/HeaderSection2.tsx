@@ -105,7 +105,7 @@ const HeaderSection2 = () => {
         </motion.div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mt-6 md:mt-10 px-2 sm:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 md:mt-10 px-2 sm:px-0">
           {/* Card Component */}
           {[
             {
@@ -129,25 +129,25 @@ const HeaderSection2 = () => {
           ].map((item, index) => (
             <motion.div
               key={index}
-              className={`group relative px-4 py-4 sm:px-6 sm:py-5 md:px-8 md:py-6 rounded-xl md:rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg md:shadow-xl transition-all duration-500`}
+              className={`group relative flex flex-col items-center justify-center p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105`}
               variants={itemVariants}
               whileHover={{
-                y: -10,
-                scale: 1.03,
+                y: -5,
+                scale: 1.05,
                 rotateX: shouldReduceMotion ? 0 : 3,
                 rotateY: shouldReduceMotion ? 0 : 3,
               }}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br from-${item.color}-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl md:rounded-2xl`} />
-              <div className="relative">
+              <div className={`absolute inset-0 bg-gradient-to-br from-${item.color}-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
+              <div className="relative flex flex-col items-center justify-center text-center">
                 <motion.div
-                  className="text-2xl sm:text-3xl md:text-4xl mb-2 sm:mb-3"
+                  className="text-3xl sm:text-4xl mb-3"
                   whileHover={{ scale: 1.2, rotate: 5 }}
                   transition={{ type: 'spring', stiffness: 300 }}
                 >
                   {item.icon}
                 </motion.div>
-                <h3 className={`text-[clamp(1.1rem,3vw,1.5rem)] md:text-[1.75rem] font-bold mb-1 md:mb-2 text-${item.color}-300 tracking-tight`}>
+                <h3 className={`text-[clamp(1.1rem,3vw,1.5rem)] md:text-[1.75rem] font-bold mb-1 text-${item.color}-300 tracking-tight`}>
                   {item.title}
                 </h3>
                 <p className="text-[clamp(0.8rem,2vw,1rem)] md:text-[1.125rem] text-gray-300 leading-relaxed tracking-wide">

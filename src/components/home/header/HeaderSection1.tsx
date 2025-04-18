@@ -6,6 +6,7 @@ import { Typewriter } from 'react-simple-typewriter';
 import { FaTelegramPlane, FaWhatsapp } from 'react-icons/fa';
 import jehadHeader from '../../../assets/jehad-header2.png';
 import { Link } from 'react-router-dom';
+import { FiDownload } from 'react-icons/fi';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 50 },
@@ -27,11 +28,6 @@ const HeaderSection1 = () => {
     label: string;
     suffix?: string;
   }[];
-
-  const handleScrollDown = () => {
-    const next = document.getElementById('services') || document.getElementById('contact');
-    if (next) next.scrollIntoView({ behavior: 'smooth' });
-  };
 
   return (
     <header className="relative min-h-screen overflow-hidden flex flex-col items-center justify-center px-4 pt-24 sm:pt-28 md:pt-32 pb-16 sm:pb-24">
@@ -97,30 +93,54 @@ const HeaderSection1 = () => {
           </span>{' '}
           {t('headerSection1.descriptionPart2')}
         </motion.p>
-
-        {/* CTA Buttons */}
-       {/* CTA Buttons */}
+      {/* -------------------- CTA Buttons -------------------- */}
 <motion.div
-  className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 mt-4 sm:mt-6 md:mt-8 w-full"  // Changed justify-start to justify-center and added w-full
+  className="flex w-full flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5 mt-6 sm:mt-8 md:mt-10"
   initial="hidden"
   animate="visible"
   variants={fadeInUp}
   custom={0.6}
 >
-  <HeaderButton to="/services" variant="blue">
+  <HeaderButton
+    to="/services"
+    variant="blue"
+    className="w-full sm:w-auto"
+    icon={<ArrowRight className="w-4 h-4" />}
+  >
     {t('headerSection1.btnServices')}
-    <ArrowRight className="w-4 h-4 ml-2" />
   </HeaderButton>
-  <HeaderButton href="https://go.jihad-shojaeha.com/free-ebook" variant="white" external>
+
+  <HeaderButton
+    href="https://go.jihad-shojaeha.com/free-ebook"
+    variant="white"
+    external
+    className="w-full sm:w-auto"
+    icon={<FiDownload className="w-4 h-4" />}
+  >
     {t('headerSection1.btnEbook')}
   </HeaderButton>
-  <HeaderButton href="https://wa.me/972599358641" variant="whatsapp" external icon={<FaWhatsapp />}>
+
+  <HeaderButton
+    href="https://wa.me/972599358641"
+    variant="whatsapp"
+    external
+    className="w-full sm:w-auto"
+    icon={<FaWhatsapp className="w-4 h-4" />}
+  >
     {t('headerSection1.btnWhatsapp')}
   </HeaderButton>
-  <HeaderButton href="https://t.me/jihadshojaeha" variant="telegram" external icon={<FaTelegramPlane />}>
+
+  <HeaderButton
+    href="https://t.me/jihadshojaeha"
+    variant="telegram"
+    external
+    className="w-full sm:w-auto"
+    icon={<FaTelegramPlane className="w-4 h-4" />}
+  >
     {t('headerSection1.btnTelegram')}
   </HeaderButton>
 </motion.div>
+
       </div>
 
       {/* Numbers Section */}
@@ -143,17 +163,6 @@ const HeaderSection1 = () => {
           ))}
         </div>
       </motion.div>
-
-      {/* Scroll Down */}
-      <motion.button
-        className="absolute bottom-4 sm:bottom-6 text-white/80"
-        onClick={handleScrollDown}
-        whileHover={{ scale: 1.1 }}
-        transition={{ duration: 0.3 }}
-        aria-label="Scroll to next section"
-      >
-        <ArrowRight className="rotate-90 w-5 h-5 sm:w-6 sm:h-6" />
-      </motion.button>
     </header>
   );
 };
@@ -193,8 +202,8 @@ const HeaderButton = memo(({ href, to, children, variant, external, icon }: any)
 
   if (to) {
     return (
-      <Link to={to} className={commonClasses}>
-        {icon && <span className="mr-1 sm:mr-2">{icon}</span>}
+      <Link to={to} className={`${commonClasses} w-50% sm:w-auto`}>
+      {icon && <span className="mr-1 sm:mr-2">{icon}</span>}
         {children}
       </Link>
     );
@@ -203,7 +212,7 @@ const HeaderButton = memo(({ href, to, children, variant, external, icon }: any)
   return (
     <a
       href={href}
-      className={commonClasses}
+      className={`${commonClasses} w-50% sm:w-auto`}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
     >

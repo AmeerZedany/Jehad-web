@@ -48,7 +48,7 @@ const HeaderSection3 = () => {
           className="text-center"
           variants={itemVariants}
         >
-          <h2 className="text-[clamp(1.75rem,5vw,3.5rem)] font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500 mb-4 sm:mb-6 tracking-tight">
+          <h2 className="text-[clamp(1.75rem,5vw,3.5rem)] font-extrabold text-white mb-4 sm:mb-6 tracking-tight">
             {t('headerSection3.title')}
           </h2>
           <p className="text-[clamp(0.9rem,3vw,1.5rem)] text-white/80 max-w-3xl mx-auto tracking-wide px-2 sm:px-0">
@@ -69,7 +69,7 @@ const HeaderSection3 = () => {
             }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl md:rounded-2xl" />
-            <div className="relative">
+            <div className="relative flex flex-col items-center justify-center text-center">
               <motion.div 
                 className="text-3xl sm:text-4xl mb-3 sm:mb-4"
                 whileHover={{ scale: 1.2, rotate: 5 }}
@@ -102,7 +102,7 @@ const HeaderSection3 = () => {
             }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl md:rounded-2xl" />
-            <div className="relative">
+            <div className="relative flex flex-col items-center justify-center text-center">
               <motion.div 
                 className="text-3xl sm:text-4xl mb-3 sm:mb-4"
                 whileHover={{ scale: 1.2, rotate: 5 }}
@@ -135,7 +135,7 @@ const HeaderSection3 = () => {
             }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl md:rounded-2xl" />
-            <div className="relative">
+            <div className="relative flex flex-col items-center justify-center text-center">
               <motion.div 
                 className="text-3xl sm:text-4xl mb-3 sm:mb-4"
                 whileHover={{ scale: 1.2, rotate: 5 }}

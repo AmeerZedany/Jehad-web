@@ -50,7 +50,7 @@ const About = () => {
           viewport={{ once: true }}
           custom={0.1}
         >
-          <p className="text-sm sm:text-base text-gray-300/90 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-300/90 leading-relaxed text-justify sm:text-start">
             {t('about.mainDescription')}
           </p>
 
@@ -58,25 +58,25 @@ const About = () => {
           <div className="grid sm:grid-cols-2 gap-4 pt-4">
             <div className="flex items-start gap-3 group">
               <FaChalkboardTeacher className="text-blue-400 text-xl group-hover:text-blue-500 transition-colors duration-300 mt-0.5" />
-              <p className="text-sm sm:text-base text-gray-300/90">
+              <p className="text-sm sm:text-base text-gray-300/90 text-justify sm:text-start">
                 {t('about.stats.trainingHours')}
               </p>
             </div>
             <div className="flex items-start gap-3 group">
               <FaUsers className="text-blue-400 text-xl group-hover:text-blue-500 transition-colors duration-300 mt-0.5" />
-              <p className="text-sm sm:text-base text-gray-300/90">
+              <p className="text-sm sm:text-base text-gray-300/90 text-justify sm:text-start">
                 {t('about.stats.trainees')}
               </p>
             </div>
             <div className="flex items-start gap-3 group">
               <FaHandshake className="text-blue-400 text-xl group-hover:text-blue-500 transition-colors duration-300 mt-0.5" />
-              <p className="text-sm sm:text-base text-gray-300/90">
+              <p className="text-sm sm:text-base text-gray-300/90 text-justify sm:text-start">
                 {t('about.stats.partnerships')}
               </p>
             </div>
             <div className="flex items-start gap-3 group">
               <FaAward className="text-blue-400 text-xl group-hover:text-blue-500 transition-colors duration-300 mt-0.5" />
-              <p className="text-sm sm:text-base text-gray-300/90">
+              <p className="text-sm sm:text-base text-gray-300/90 text-justify sm:text-start">
                 {t('about.stats.awards')}
               </p>
             </div>
@@ -92,12 +92,12 @@ const About = () => {
           viewport={{ once: true }}
           custom={0.2}
         >
-          <p className="text-sm sm:text-base text-gray-300/90 leading-relaxed">
+          <p className="text-sm sm:text-base text-gray-300/90 leading-relaxed text-justify sm:text-start">
             {t('about.collaborations')}
           </p>
 
           <div className="bg-white/5 p-5 rounded-lg border-l-4 border-blue-500 shadow-sm">
-            <p className="text-sm sm:text-base text-gray-300/90 leading-relaxed">
+            <p className="text-sm sm:text-base text-gray-300/90 leading-relaxed text-justify sm:text-start">
               {t('about.recentFocus')}
             </p>
           </div>
