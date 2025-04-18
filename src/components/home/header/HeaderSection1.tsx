@@ -93,7 +93,7 @@ const HeaderSection1 = () => {
           </span>{' '}
           {t('headerSection1.descriptionPart2')}
         </motion.p>
-      {/* -------------------- CTA Buttons -------------------- */}
+{/* -------------------- CTA Buttons -------------------- */}
 <motion.div
   className="flex w-full flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-5 mt-6 sm:mt-8 md:mt-10"
   initial="hidden"
@@ -106,6 +106,7 @@ const HeaderSection1 = () => {
     variant="blue"
     className="w-full sm:w-auto"
     icon={<ArrowRight className="w-4 h-4" />}
+    isArabic={isArabic}
   >
     {t('headerSection1.btnServices')}
   </HeaderButton>
@@ -116,6 +117,7 @@ const HeaderSection1 = () => {
     external
     className="w-full sm:w-auto"
     icon={<FiDownload className="w-4 h-4" />}
+    isArabic={isArabic}
   >
     {t('headerSection1.btnEbook')}
   </HeaderButton>
@@ -126,6 +128,7 @@ const HeaderSection1 = () => {
     external
     className="w-full sm:w-auto"
     icon={<FaWhatsapp className="w-4 h-4" />}
+    isArabic={isArabic}
   >
     {t('headerSection1.btnWhatsapp')}
   </HeaderButton>
@@ -136,10 +139,12 @@ const HeaderSection1 = () => {
     external
     className="w-full sm:w-auto"
     icon={<FaTelegramPlane className="w-4 h-4" />}
+    isArabic={isArabic}
   >
     {t('headerSection1.btnTelegram')}
   </HeaderButton>
 </motion.div>
+
 
       </div>
 
@@ -189,8 +194,7 @@ const AnimatedNumber = ({ value, duration = 2000, suffix = '', resetKey }: any) 
 
   return <>{display}{suffix}</>;
 };
-
-const HeaderButton = memo(({ href, to, children, variant, external, icon }: any) => {
+const HeaderButton = memo(({ href, to, children, variant, external, icon, isArabic = false, className = '' }: any) => {
   const styles: any = {
     blue: 'bg-[#63b3ed] text-white hover:bg-[#4299e1]',
     white: 'bg-white text-black hover:bg-gray-100',
@@ -198,28 +202,40 @@ const HeaderButton = memo(({ href, to, children, variant, external, icon }: any)
     telegram: 'bg-blue-500 text-white hover:bg-blue-600',
   };
 
-  const commonClasses = `px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 rounded-full font-medium sm:font-semibold flex items-center transition-all duration-300 text-sm sm:text-base ${styles[variant]}`;
+  const commonClasses = `
+    px-3 py-2 sm:px-4 sm:py-2.5 md:px-5 md:py-3 
+    rounded-full font-medium sm:font-semibold 
+    transition-all duration-300 
+    text-sm sm:text-base 
+    flex items-center justify-center 
+    ${styles[variant]} ${className}
+  `;
+
+  const contentLayout = isArabic ? 'flex-row-reverse' : 'flex-row';
+  const iconSpacing = isArabic ? 'pl-2' : 'pr-2';
+
+  const content = (
+    <div className={`flex ${contentLayout} items-center`}>
+      {icon && <span className={`${iconSpacing} flex-shrink-0`}>{icon}</span>}
+      <span>{children}</span>
+    </div>
+  );
 
   if (to) {
-    return (
-      <Link to={to} className={`${commonClasses} w-50% sm:w-auto`}>
-      {icon && <span className="mr-1 sm:mr-2">{icon}</span>}
-        {children}
-      </Link>
-    );
+    return <Link to={to} className={commonClasses}>{content}</Link>;
   }
 
   return (
     <a
       href={href}
-      className={`${commonClasses} w-50% sm:w-auto`}
+      className={commonClasses}
       target={external ? '_blank' : undefined}
       rel={external ? 'noopener noreferrer' : undefined}
     >
-      {icon && <span className="mr-1 sm:mr-2">{icon}</span>}
-      {children}
+      {content}
     </a>
   );
 });
+
 
 export default HeaderSection1;
