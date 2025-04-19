@@ -1,161 +1,156 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { FaGraduationCap, FaLightbulb, FaBuilding } from 'react-icons/fa';
+import {
+  FaGraduationCap,
+  FaLightbulb,
+  FaBuilding,
+} from 'react-icons/fa';
+import { IconBaseProps } from 'react-icons/lib';
+
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                           */
+/* ------------------------------------------------------------------ */
+
+interface ServiceCardProps {
+  icon: React.ComponentType<IconBaseProps>;
+  color: string; // Tailwind hue (yellow | blue | green)
+  titleKey: string;
+  listKey: string;
+  variants: Record<string, any>;
+}
+
+const ServiceCard = ({
+  icon: Icon,
+  color,
+  titleKey,
+  listKey,
+  variants,
+}: ServiceCardProps) => {
+  const { t, i18n } = useTranslation();
+  const bulletColor = 'text-orange-400';
+
+  return (
+    <motion.div
+      variants={variants}
+      whileHover={{ y: -8, scale: 1.02, transition: { duration: 0.25 } }}
+      className="group relative flex h-full flex-col rounded-xl bg-white/5 px-5 py-6 backdrop-blur-md
+                 border border-white/10 shadow-lg transition-shadow duration-300 hover:shadow-2xl"
+    >
+      {/* Hover tint */}
+      <div
+        className={`absolute inset-0 rounded-xl opacity-0 transition-opacity duration-300
+                    group-hover:opacity-100 bg-gradient-to-br from-${color}-500/15 to-transparent`}
+      />
+      {/* Card content */}
+      <div className="relative z-10 flex flex-col items-center text-center">
+        <motion.span
+          whileHover={{ rotate: 5, scale: 1.15 }}
+          transition={{ type: 'spring', stiffness: 300 }}
+          className="mb-4 text-4xl"
+        >
+          <Icon className={`text-${color}-400`} />
+        </motion.span>
+
+        <h3
+          className={`mb-4 font-bold tracking-tight text-${color}-300
+                      text-[clamp(1.1rem,3.2vw,1.6rem)]`}
+        >
+          {t(titleKey)}
+        </h3>
+
+        <ul
+          className="flex-1 space-y-2 overflow-hidden text-[clamp(0.82rem,2.2vw,1rem)]
+                     leading-relaxed text-gray-300"
+        >
+          {(t(listKey, { returnObjects: true }) as string[]).map(
+            (item, idx) => (
+              <li key={idx} className="flex items-start gap-2">
+                <span className={`${bulletColor} mt-1`}>•</span>
+                <span className="break-words text-pretty">{item}</span>
+              </li>
+            )
+          )}
+        </ul>
+      </div>
+    </motion.div>
+  );
+};
+
+/* ------------------------------------------------------------------ */
+/*  Main Section                                                      */
+/* ------------------------------------------------------------------ */
 
 const HeaderSection3 = () => {
   const { t } = useTranslation();
 
-  // Animation variants
+  /* Animation variants */
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
+      transition: { staggerChildren: 0.2 },
+    },
   };
-
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+      transition: { duration: 0.6, ease: 'easeOut' },
+    },
   };
 
   return (
-    <section className="relative z-10 bg-gradient-to-b from-[#000] to-[#0f172a] text-white py-16 sm:py-24 md:py-32 px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-20 overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-green-500/10 rounded-full blur-3xl" />
+    <section className="relative z-10 overflow-hidden bg-gradient-to-b from-black to-[#0f172a] px-4 py-16 text-white
+                        sm:px-6 sm:py-24 md:px-8 md:py-32">
+      {/* Decorative blobs */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute right-0 top-0 h-52 w-52 rounded-full bg-blue-500/10 blur-3xl
+                        sm:h-64 sm:w-64 md:h-80 md:w-80 lg:h-96 lg:w-96" />
+        <div className="absolute bottom-0 left-0 h-52 w-52 rounded-full bg-green-500/10 blur-3xl
+                        sm:h-64 sm:w-64 md:h-80 md:w-80 lg:h-96 lg:w-96" />
       </div>
 
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
-        className="max-w-6xl mx-auto space-y-10 sm:space-y-14 md:space-y-16 relative"
+        viewport={{ once: true, margin: '-120px' }}
+        className="relative mx-auto max-w-6xl space-y-14"
       >
-        {/* Section Title */}
-        <motion.div 
-          className="text-center"
-          variants={itemVariants}
-        >
-          <h2 className="text-[clamp(1.75rem,5vw,3.5rem)] font-extrabold text-white mb-4 sm:mb-6 tracking-tight">
+        {/* Title */}
+        <motion.header variants={itemVariants} className="text-center">
+          <h2 className="mb-5 text-[clamp(1.75rem,5vw,3.2rem)] font-extrabold tracking-tight">
             {t('headerSection3.title')}
           </h2>
-          <p className="text-[clamp(0.9rem,3vw,1.5rem)] text-white/80 max-w-3xl mx-auto tracking-wide px-2 sm:px-0">
+          <p className="mx-auto max-w-3xl px-2 text-[clamp(0.9rem,3vw,1.5rem)] tracking-wide text-white/80 sm:px-0">
             {t('headerSection3.subtitle')}
           </p>
-        </motion.div>
+        </motion.header>
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-2 sm:px-0">
-          {/* TOT Card */}
-          <motion.div 
-            className="group relative px-5 py-5 sm:px-6 sm:py-6 md:px-8 md:py-6 rounded-xl md:rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg md:shadow-xl hover:shadow-2xl transition-all duration-500"
+        {/* Services */}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ServiceCard
+            icon={FaGraduationCap}
+            color="yellow"
+            titleKey="headerSection3.tot.title"
+            listKey="headerSection3.tot.items"
             variants={itemVariants}
-            whileHover={{ 
-              y: -10,
-              scale: 1.02,
-              transition: { duration: 0.3 }
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl md:rounded-2xl" />
-            <div className="relative flex flex-col items-center justify-center text-center">
-              <motion.div 
-                className="text-3xl sm:text-4xl mb-3 sm:mb-4"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <FaGraduationCap className="text-yellow-400" />
-              </motion.div>
-              <h3 className="text-[clamp(1.1rem,3vw,1.5rem)] md:text-[1.75rem] font-bold mb-3 sm:mb-4 text-yellow-300 tracking-tight">
-                {t('headerSection3.tot.title')}
-              </h3>
-              <ul className="space-y-2 sm:space-y-3 text-[clamp(0.8rem,2vw,1rem)] md:text-[1.125rem] text-gray-300 tracking-wide">
-                {(t('headerSection3.tot.items', { returnObjects: true }) as string[]).map((item: string, index: number) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-orange-400 mt-1">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-
-          {/* Consulting Card */}
-          <motion.div 
-            className="group relative px-5 py-5 sm:px-6 sm:py-6 md:px-8 md:py-6 rounded-xl md:rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg md:shadow-xl hover:shadow-2xl transition-all duration-500"
+          />
+          <ServiceCard
+            icon={FaLightbulb}
+            color="blue"
+            titleKey="headerSection3.consulting.title"
+            listKey="headerSection3.consulting.items"
             variants={itemVariants}
-            whileHover={{ 
-              y: -10,
-              scale: 1.02,
-              transition: { duration: 0.3 }
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl md:rounded-2xl" />
-            <div className="relative flex flex-col items-center justify-center text-center">
-              <motion.div 
-                className="text-3xl sm:text-4xl mb-3 sm:mb-4"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <FaLightbulb className="text-blue-400" />
-              </motion.div>
-              <h3 className="text-[clamp(1.1rem,3vw,1.5rem)] md:text-[1.75rem] font-bold mb-3 sm:mb-4 text-blue-300 tracking-tight">
-                {t('headerSection3.consulting.title')}
-              </h3>
-              <ul className="space-y-2 sm:space-y-3 text-[clamp(0.8rem,2vw,1rem)] md:text-[1.125rem] text-gray-300 tracking-wide">
-                {(t('headerSection3.consulting.items', { returnObjects: true }) as string[]).map((item: string, index: number) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-orange-400 mt-1">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-
-          {/* Corporate Card */}
-          <motion.div 
-            className="group relative px-5 py-5 sm:px-6 sm:py-6 md:px-8 md:py-6 rounded-xl md:rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 shadow-lg md:shadow-xl hover:shadow-2xl transition-all duration-500"
+          />
+          <ServiceCard
+            icon={FaBuilding}
+            color="green"
+            titleKey="headerSection3.corporate.title"
+            listKey="headerSection3.corporate.items"
             variants={itemVariants}
-            whileHover={{ 
-              y: -10,
-              scale: 1.02,
-              transition: { duration: 0.3 }
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl md:rounded-2xl" />
-            <div className="relative flex flex-col items-center justify-center text-center">
-              <motion.div 
-                className="text-3xl sm:text-4xl mb-3 sm:mb-4"
-                whileHover={{ scale: 1.2, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <FaBuilding className="text-green-400" />
-              </motion.div>
-              <h3 className="text-[clamp(1.1rem,3vw,1.5rem)] md:text-[1.75rem] font-bold mb-3 sm:mb-4 text-green-300 tracking-tight">
-                {t('headerSection3.corporate.title')}
-              </h3>
-              <ul className="space-y-2 sm:space-y-3 text-[clamp(0.8rem,2vw,1rem)] md:text-[1.125rem] text-gray-300 tracking-wide">
-                {(t('headerSection3.corporate.items', { returnObjects: true }) as string[]).map((item: string, index: number) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-orange-400 mt-1">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
+          />
         </div>
       </motion.div>
     </section>

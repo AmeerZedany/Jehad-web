@@ -200,33 +200,32 @@ const AlbumPage = ({ headerHeight = 0 }: { headerHeight?: number }) => {
       />
 
       {/* Header section */}
-<div className="max-w-5xl mx-auto text-center px-4 sm:px-6 pt-12 sm:pt-20 pb-6 sm:pb-8">
-  <motion.h1
-    className="text-[clamp(1.5rem,5vw,2.5rem)] font-bold leading-tight tracking-normal text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500"
-    initial={{ y: -15, opacity: 0 }}
-    animate={{ y: 0, opacity: 1 }}
-    transition={{ 
-      duration: 0.6, 
-      ease: [0.16, 1, 0.3, 1] 
-    }}
-  >
-    {t('gallery.title')}
-  </motion.h1>
+      <div className="max-w-5xl mx-auto text-center px-4 sm:px-6 pt-12 sm:pt-20 pb-6 sm:pb-8">
+        <motion.h1
+          className="text-[clamp(1.5rem,5vw,2.5rem)] font-bold leading-tight tracking-normal text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-blue-500"
+          initial={{ y: -15, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ 
+            duration: 0.6, 
+            ease: [0.16, 1, 0.3, 1] 
+          }}
+        >
+          {t('gallery.title')}
+        </motion.h1>
 
-  <motion.p
-    className="mt-3 sm:mt-4 text-[clamp(0.875rem,3.5vw,1.125rem)] text-gray-300/90 leading-relaxed max-w-2xl mx-auto"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ 
-      delay: 0.3, 
-      duration: 0.8, 
-      ease: [0.16, 1, 0.3, 1] 
-    }}
-  >
-    {t('gallery.description')}
-  </motion.p>
-</div>
-
+        <motion.p
+          className="mt-3 sm:mt-4 text-[clamp(0.875rem,3.5vw,1.125rem)] text-gray-300/90 leading-relaxed max-w-2xl mx-auto text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ 
+            delay: 0.3, 
+            duration: 0.8, 
+            ease: [0.16, 1, 0.3, 1] 
+          }}
+        >
+          {t('gallery.description')}
+        </motion.p>
+      </div>
 
       {/* Content section */}
       <div className="max-w-7xl mx-auto pb-12 sm:pb-16">
@@ -329,9 +328,9 @@ const AlbumPage = ({ headerHeight = 0 }: { headerHeight?: number }) => {
                 />
               </div>
 
-              {/* Enhanced caption */}
+              {/* Enhanced caption positioned at the bottom center */}
               <motion.div
-                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-6 py-3"
+                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-6 py-3 flex justify-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}

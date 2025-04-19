@@ -51,8 +51,12 @@ const HeaderSection2 = () => {
         transition={{ delay: 0.5 }}
       />
 
+   {/* ✨ Smoother & brighter bottom fade into the next image */}
+{/* 🧼 Cleaner bottom fade — fully covers blend zone */}
+<div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-white z-10 pointer-events-none" />
+
       <motion.div
-        className="max-w-7xl mx-auto text-center space-y-8 md:space-y-14 relative"
+        className="max-w-7xl mx-auto text-center space-y-8 md:space-y-14 relative z-30"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -64,21 +68,11 @@ const HeaderSection2 = () => {
           variants={itemVariants}
         >
           <motion.div
-            className={`
-              relative z-10 flex flex-col sm:flex-row items-center justify-center
-              gap-4 sm:gap-6
-              p-6
-              bg-white border border-gray-200
-              rounded-2xl shadow-2xl
-              max-w-xl mx-auto
-              transition-all duration-300
-              ${isArabic ? 'sm:flex-row-reverse text-right' : 'text-left'}
-            `}
+            className={`relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 p-6 bg-white border border-gray-200 rounded-2xl shadow-2xl max-w-xl mx-auto transition-all duration-300 ${isArabic ? 'sm:flex-row-reverse text-right' : 'text-left'}`}
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-            {/* Logo */}
             <motion.img
               src={jehadHeader}
               alt="Jehad Logo"
@@ -87,12 +81,10 @@ const HeaderSection2 = () => {
               transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
             />
 
-            {/* Elegant Separator - Hidden on mobile */}
             <div className="hidden sm:flex text-3xl text-blue-400 font-light select-none items-center leading-none">
               |
             </div>
 
-            {/* Name & Subtitle */}
             <div className="flex flex-col items-center justify-center text-center">
               <h2 className="text-[clamp(1.25rem,4vw,2.5rem)] font-extrabold text-gray-900 leading-snug tracking-tight">
                 المدرب <span className="text-blue-500">جهاد شجاعية</span>
@@ -106,8 +98,7 @@ const HeaderSection2 = () => {
 
         {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 md:mt-10 px-2 sm:px-0">
-          {/* Card Component */}
-          {[
+          {[ 
             {
               icon: <FaBook className="text-yellow-400" />,
               title: t('headerSection2.experience.title'),
