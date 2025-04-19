@@ -52,6 +52,7 @@ const Contact = () => {
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         body: data,
+        
       });
       const result = await res.json();
 
